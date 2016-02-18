@@ -1,0 +1,47 @@
+{
+  "name": "configly",
+  "version": "3.0.0",
+  "description": "A lightweight replacement for the `config` module that works with custom config directory and pluggable parsers",
+  "main": "index.js",
+  "scripts": {
+    "lint": "true || eslint index.js",
+    "debug": "node test.js --test ok",
+    "test": "true || tap --coverage-report=lcov --check-coverage --lines 99 --functions 99 --branches 99 test/*.js "
+  },
+  "pre-commit": [
+    "lint",
+    "test"
+  ],
+  "engines": {
+    "node": ">= 0.10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/alexindigo/configly.git"
+  },
+  "keywords": [
+    "env",
+    "environment",
+    "config-node",
+    "node-config",
+    "configuration",
+    "config",
+    "conf",
+    "directory",
+    "pluggable",
+    "parser"
+  ],
+  "author": "Alex Indigo <iam@alexindigo.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alexindigo/configly/issues"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "coveralls": "^2.11.6",
+    "eslint": "^1.10.3",
+    "pre-commit": "^1.1.2",
+    "tap": "^5.4.4"
+  }
+}

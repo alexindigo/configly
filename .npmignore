@@ -1,0 +1,15 @@
+.editorconfig
+.eslintignore
+.eslintrc
+.gitignore
+.istanbul.yml
+.npmignore
+.travis.yml
+
+coverage
+node_modules
+
+appveyor.yml
+test.js
+
+*.log
