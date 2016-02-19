@@ -1,0 +1,10 @@
+{
+  "Customers": {
+    "dbName":"from_custom-environment-variables_json",
+    "shell":"SHELL",
+    "pwd":"PWD"
+  },
+  "Zap": "${TTTT}", 
+  "Single": "${LANG}",
+  "Combined": "${LOGNAME}:${HOME}"
+}

@@ -5,11 +5,10 @@
 .istanbul.yml
 .npmignore
 .travis.yml
+appveyor.yml
 
 coverage
 node_modules
-
-appveyor.yml
-test.js
+test
 
 *.log
