@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "true || eslint index.js",
     "debug": "node test.js --test ok",
-    "test": "true || tap --coverage-report=lcov --check-coverage --lines 99 --functions 99 --branches 99 test/*.js "
+    "test": "tap --coverage-report=lcov --check-coverage --lines 95 --functions 99 --branches 80 test/*.js "
   },
   "pre-commit": [
     "lint",
@@ -37,7 +37,8 @@
     "url": "https://github.com/alexindigo/configly/issues"
   },
   "dependencies": {
-    "deeply": "^1.0.0"
+    "deeply": "^1.0.0",
+    "strip-bom": "^2.0.0"
   },
   "devDependencies": {
     "coveralls": "^2.11.6",

@@ -1,15 +1,27 @@
 {
   "Customers": {
-    "dbName":"from_default_json",
-    "dbPassword":"password will be overwritten.",
-    "dbPassword2":"password will be overwritten.",
-    "lang":["en","es"]
+    "dbName": "from_default_json",
+    "dbPassword": "ABC",
+    "dbPassword2": "XYZ",
+    "lang": [
+      "en",
+      "es"
+    ]
   },
   "AnotherModule": {
-    "parm1":"value1"
+    "parm1": "value1"
   },
-  "staticArray": [2,1,3],
-  "Inline": {"a": "", "b": "1"},
+  "staticArray": [
+    4,
+    5,
+    6
+  ],
+  "Inline": {
+    "a": "",
+    "b": "1"
+  },
   "ContainsQuote": "\"this has a quote\"",
-  "MoreComplexQuote": "<a href=\"http://localhost:3000/offers/reply?id={{system.contact.value}}\">Test String</a>"
+  "MoreComplexQuote": "<a href=\"http://localhost:3000/offers/reply?id=${{system.contact.value}}\">Test String</a>",
+  "Single": "A VAR",
+  "Combined": "COMBINED VAR 1/2:COMBINED VAR 2/2"
 }

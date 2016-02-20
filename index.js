@@ -1,8 +1,9 @@
-var Module = require('module')
-  , path   = require('path')
-  , fs     = require('fs')
-  , os     = require('os')
-  , merge  = require('deeply')
+var Module   = require('module')
+  , path     = require('path')
+  , fs       = require('fs')
+  , os       = require('os')
+  , merge    = require('deeply')
+  , stripBOM = require('strip-bom')
   // local files
   , envVars     = require('./lib/env_vars.js')
   , notEmpty    = require('./lib/not_empty.js')
@@ -374,24 +375,6 @@ function jsCompile(content, file)
 function compareExtensions(a, b)
 {
   return a === b ? 0 : (a < b ? -1 : 1);
-}
-
-/**
- * Removes Byte Order Marker. This catches EF BB BF (the UTF-8 BOM)
- * because the buffer-to-string conversion in `fs.readFileSync()`
- * translates it to FEFF, the UTF-16 BOM.
- * Copied from nodejs project.
- *
- * @param   {string} content - content to clean up
- * @returns {string} - string without BOM
- */
-function stripBOM(content)
-{
-  if (content.charCodeAt(0) === 0xFEFF)
-  {
-    content = content.slice(1);
-  }
-  return content;
 }
 
 /**

@@ -5,7 +5,7 @@
     "dbPassword"  :"TESTLINEONE",
     "dbPassword2" :"TESTLINETWO"
   },
-  "Zap"      : "${TTTT}",
+  "Zap"      : "${EMPTY_VAR}",
   "Single"   : "${JUST_VAR}",
   "Combined" : "${VARPART1}:${VARPART2}",
   "nosee"    : "${NOEXISTING} + another ${EMPTY} var"
