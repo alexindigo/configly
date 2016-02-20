@@ -4,9 +4,9 @@
   "description": "A lightweight replacement for the `config` module that works with custom config directory and pluggable parsers",
   "main": "index.js",
   "scripts": {
-    "lint": "true || eslint index.js",
+    "lint": "eslint index.js test/*.js",
     "debug": "node test.js --test ok",
-    "test": "tap --coverage-report=lcov --check-coverage --lines 95 --functions 99 --branches 80 test/*.js "
+    "test": "nyc --reporter=lcov --reporter=text --check-coverage --lines 95 --functions 99 --branches 80 tap test/*.js"
   },
   "pre-commit": [
     "lint",
@@ -42,8 +42,9 @@
   },
   "devDependencies": {
     "coveralls": "^2.11.6",
-    "eslint": "^1.10.3",
+    "eslint": "^2.2.0",
+    "nyc": "^5.6.0",
     "pre-commit": "^1.1.2",
-    "tap": "^5.4.4"
+    "tap": "^5.6.0"
   }
 }
