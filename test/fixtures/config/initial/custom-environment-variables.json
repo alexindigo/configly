@@ -1,10 +1,13 @@
 {
-  "Customers": {
+  "Customers":
+  {
     "dbName":"from_custom-environment-variables_json",
-    "shell":"SHELL",
-    "pwd":"PWD"
+    "shell" :"SHELL",
+    "pwd"   :"PWD"
   },
-  "Zap": "${TTTT}", 
-  "Single": "${LANG}",
-  "Combined": "${LOGNAME}:${HOME}"
+  "Zap"      : "${TTTT}",
+  "Single"   : "${LANG}",
+  "Combined" : "${LOGNAME}:${HOME}",
+  "nosee"    : "${NOEXISTING} + another ${EMPTY} var",
+  "path"     : "${PATH}"
 }

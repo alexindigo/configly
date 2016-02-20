@@ -3,7 +3,12 @@ var Module = require('module')
   , fs     = require('fs')
   , os     = require('os')
   // local files
-  , customEnvHook = require('./lib/custom_env_hook')
+  , envVars     = require('./lib/env_vars.js')
+  , notEmpty    = require('./lib/not_empty.js')
+  , parseTokens = require('./lib/parse_tokens.js')
+  // static
+  , hostname = process.env['HOST'] || process.env['HOSTNAME'] || os.hostname() || ''
+  , host     = hostname.split('.')[0]
   ;
 
 // Public API
@@ -25,15 +30,25 @@ configly._loadContent       = loadContent;
 configly._mergeLayers       = mergeLayers;
 configly._compareExtensions = compareExtensions;
 
-// name constants
-configly.FILES = {
-  default: 'default',
-  local  : 'local',
-  custom : 'custom-environment-variables',
-  runtime: 'runtime',
-  // separator
-  '-'    : '-'
+// defaults
+configly.DEFAULTS = {
+  environment  : 'development',
+  customEnvVars: 'custom-environment-variables'
 };
+
+// filename chunk separator
+configly.SEPARATOR = '-';
+
+// file base names
+configly.FILES = [
+  'default',
+  '', // allow suffixes as a basename (e.g. `environment`)
+  host,
+  hostname,
+  'local',
+  configly.DEFAULTS.customEnvVars,
+  'runtime'
+];
 
 // by default use just `js` and `json` parsers
 configly.PARSERS = {
@@ -44,7 +59,7 @@ configly.PARSERS = {
 // post-processing hooks
 // matched by the filename prefix
 configly.HOOKS = {};
-configly.HOOKS[configly.FILES.custom] = customEnvHook;
+configly.HOOKS[configly.DEFAULTS.customEnvVars] = envVars;
 
 /**
  * Returns config object from the cache (determined by `dir`/`parsers` arguments),
@@ -121,52 +136,21 @@ console.log('result', result, '\n\n');
 function getFiles(env)
 {
   var files       = []
-    , environment = env['NODE_ENV'] || 'development'
-    , appInstance = env['NODE_APP_INSTANCE'] ? configly.FILES['-'] + env['NODE_APP_INSTANCE'] : ''
-    , hostname    = env['HOST'] || env['HOSTNAME'] || os.hostname() || ''
-    , host        = hostname.split('.')[0]
+    , environment = env['NODE_ENV'] || configly.DEFAULTS.environment
+    , appInstance = env['NODE_APP_INSTANCE']
     ;
 
-  // populate files list in specific order
-  addIfNotEmpty(files,
-    configly.FILES.default,
-    configly.FILES.default + appInstance);
+  // generate config files variations
+  configly.FILES.forEach(function(baseName)
+  {
+    // check for variables
+    // keep baseName if no variables found
+    baseName = parseTokens(baseName, env) || baseName;
 
-  // environment specific config (bread and butter of the functionality)
-  addIfNotEmpty(files,
-    environment,
-    environment + appInstance);
-
-  // add host
-  addIfNotEmpty(files,
-    host,
-    host + appInstance,
-    host + configly.FILES['-'] + environment,
-    host + configly.FILES['-'] + environment + appInstance);
-
-  // and full hostname
-  addIfNotEmpty(files,
-    hostname,
-    hostname + appInstance,
-    hostname + configly.FILES['-'] + environment,
-    hostname + configly.FILES['-'] + environment + appInstance);
-
-  // local configuration
-  addIfNotEmpty(files,
-    configly.FILES.local,
-    configly.FILES.local + appInstance,
-    configly.FILES.local + configly.FILES['-'] + environment,
-    configly.FILES.local + configly.FILES['-'] + environment + appInstance);
-
-  // look for environment variables advanced mapping
-  addIfNotEmpty(files,
-    configly.FILES.custom,
-    configly.FILES.custom + appInstance,
-    configly.FILES.custom + configly.FILES['-'] + environment,
-    configly.FILES.custom + configly.FILES['-'] + environment + appInstance);
-
-  // it is backwards compatibility in the `config` module, but why not?
-  addIfNotEmpty(files, configly.FILES.runtime);
+    // add base name with available suffixes
+    addWithSuffixes(files, baseName, appInstance);
+    addWithSuffixes(files, baseName, environment, appInstance);
+  });
 
   return files;
 }
@@ -283,23 +267,46 @@ function mergeLayers(layers)
 }
 
 /**
- * Adds new element to the list
- * if element if not empty (`undefined`, `null`, `''`)
+ * Adds new element to the list,
+ * adds provided suffixes iteratively
+ * adding them to the baseName (if not empty)
  * Also checks for duplicates
  *
  * @param {array} list - array to add element to
- * @param {...mixed} element - element to compare against, affects rest of the arguments
+ * @param {string} baseName - element to compare against, affects rest of the arguments
+ * @param {...string} [suffix] - additional suffixes to use with the `baseName`
  */
-function addIfNotEmpty(list, element)
+function addWithSuffixes(list, baseName)
 {
-  var args = Array.prototype.slice.call(arguments, 1);
+  var suffixes = Array.prototype.slice.call(arguments, 2);
 
-  if (element != null && element.toString().length > 0)
+  // don't push empty baseName by itself
+  notEmpty(baseName) && pushUniquely(list, baseName);
+
+  suffixes.forEach(function(suffix)
   {
-    args.forEach(function(el)
+    // filter out empty suffixes
+    // and extend baseName
+    if (notEmpty(suffix))
     {
-      if (list.indexOf(el) == -1) list.push(el);
-    });
+      baseName += (baseName ? configly.SEPARATOR : '') + suffix;
+      pushUniquely(list, baseName);
+    }
+  });
+}
+
+/**
+ * Pushes element into the array,
+ * only if such element is not there yet
+ *
+ * @param   {array} list - array to add element into
+ * @param   {mixed} element - element to add
+ */
+function pushUniquely(list, element)
+{
+  if (list.indexOf(element) == -1)
+  {
+    list.push(element);
   }
 }
 
@@ -375,45 +382,3 @@ function stripBOM(content)
   }
   return content;
 }
-
-  //
-  // var extNames = ['js', 'json', 'json5', 'hjson', 'toml', 'coffee', 'iced', 'yaml', 'yml', 'cson', 'properties'];
-  //
-  // // Override with environment variables if there is a custom-environment-variables.EXT mapping file
-  // var customEnvVars = util.getCustomEnvVars(CONFIG_DIR, extNames);
-  // util.extendDeep(config, customEnvVars);
-  //
-
-
-
-
-// util.substituteDeep = function (substitutionMap, variables) {
-//   var result = {};
-//
-//   function _substituteVars(map, vars, pathTo) {
-//     for (var prop in map) {
-//       var value = map[prop];
-//       if (typeof(value) === 'string') { // We found a leaf variable name
-//         if (vars[value]) { // if the vars provide a value set the value in the result map
-//           util.setPath(result, pathTo.concat(prop), vars[value]);
-//         }
-//       }
-//       else if (util.isObject(value)) { // work on the subtree, giving it a clone of the pathTo
-//         if('__name' in value && '__format' in value && vars[value.__name]) {
-//           var parsedValue = util.parseString(vars[value.__name], value.__format);
-//           util.setPath(result, pathTo.concat(prop), parsedValue);
-//         } else {
-//           _substituteVars(value, vars, pathTo.concat(prop));
-//         }
-//       }
-//       else {
-//         msg = "Illegal key type for substitution map at " + pathTo.join('.') + ': ' + typeof(value);
-//         throw Error(msg);
-//       }
-//     }
-//   }
-//
-//   _substituteVars(substitutionMap, variables, []);
-//   return result;
-//
-// };
