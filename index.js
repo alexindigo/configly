@@ -2,6 +2,7 @@ var Module = require('module')
   , path   = require('path')
   , fs     = require('fs')
   , os     = require('os')
+  , merge  = require('deeply')
   // local files
   , envVars     = require('./lib/env_vars.js')
   , notEmpty    = require('./lib/not_empty.js')
@@ -23,6 +24,7 @@ configly.load               = load;
 configly._stripBOM          = stripBOM;
 configly._getFiles          = getFiles;
 configly._loadFiles         = loadFiles;
+configly._arrayMerge        = arrayMerge;
 configly._applyHooks        = applyHooks;
 configly._resolveDir        = resolveDir;
 configly._resolveExts       = resolveExts;
@@ -60,6 +62,7 @@ configly.PARSERS = {
 // matched by the filename prefix
 configly.HOOKS = {};
 configly.HOOKS[configly.DEFAULTS.customEnvVars] = envVars;
+
 
 /**
  * Returns config object from the cache (determined by `dir`/`parsers` arguments),
@@ -113,15 +116,12 @@ function load(directory, parsers)
 
   // get config files names suitable for the situation
   files = configly._getFiles(process.env);
-console.log('files', files, '\n\n');
 
   // load all available files
   layers = configly._loadFiles(directory, files, parsers);
-console.log('layers', JSON.stringify(layers, null, '  '), '\n\n');
 
   // merge loaded layers
   result = configly._mergeLayers(layers);
-console.log('result', result, '\n\n');
 
   return result;
 }
@@ -263,7 +263,18 @@ function applyHooks(config, filename)
  */
 function mergeLayers(layers)
 {
-  return layers;
+  var result = {};
+
+  layers.forEach(function(layer)
+  {
+    layer.exts.forEach(function(cfg)
+    {
+      // have customizable's array merge function
+      result = merge(result, cfg.config, configly._arrayMerge);
+    });
+  });
+
+  return result;
 }
 
 /**
@@ -381,4 +392,16 @@ function stripBOM(content)
     content = content.slice(1);
   }
   return content;
+}
+
+/**
+ * Default array merge strategy – replace `a` with `b`
+ *
+ * @param   {mixed} a - one array element
+ * @param   {mixed} b - another array element
+ * @returns {mixed} - result of the merge of the array
+ */
+function arrayMerge(a, b)
+{
+  return b;
 }

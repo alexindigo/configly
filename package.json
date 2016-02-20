@@ -37,6 +37,7 @@
     "url": "https://github.com/alexindigo/configly/issues"
   },
   "dependencies": {
+    "deeply": "^1.0.0"
   },
   "devDependencies": {
     "coveralls": "^2.11.6",
