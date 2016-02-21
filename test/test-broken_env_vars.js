@@ -17,4 +17,4 @@ tap.throws(function()
   config(path.join(__dirname, 'fixtures/config/' + testName));
 },
 {message: 'Illegal key type for custom-environment-variables at Arrays Not Supported: [object Array]'},
-'expected to throw on array element within custom-environment-variables file');
+'expects to throw on array element within custom-environment-variables file');

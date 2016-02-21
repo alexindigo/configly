@@ -16,4 +16,4 @@ process.env['VARPART2']    = 'COMBINED VAR 2/2';
 
 configObj = config(path.join(__dirname, 'fixtures/config/' + testName));
 
-tap.same(configObj, expected);
+tap.same(configObj, expected, 'expects to get proper config object');

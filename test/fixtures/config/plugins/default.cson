@@ -11,6 +11,7 @@
   },
   AnotherModule: {
     parm4: "value4"
+    parmCS: "cson"
   },
   staticArray: [
     2

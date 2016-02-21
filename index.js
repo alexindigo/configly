@@ -227,7 +227,7 @@ function loadContent(file, parser)
   }
   catch (e)
   {
-    throw new Error('Config file ' + file + ' cannot be read.');
+    throw new Error('Config file ' + file + ' cannot be read or malformed.');
   }
 
   return config;
@@ -351,7 +351,7 @@ function resolveExts(parsers)
  *
  * @param   {string} content - file's content
  * @param   {string} file - full path of the file
- * @returns {mix} - result javascript object
+ * @returns {mixed} - result javascript object
  */
 function jsCompile(content, file)
 {

@@ -1,0 +1,12 @@
+{
+  "Customers":
+  {
+    "dbName"      :"from_custom-environment-variables_json",
+    "dbPassword"  :"TESTLINEONE",
+    "dbPassword2" :"TESTLINETWO"
+  },
+  "Zap"      : "${EMPTY_VAR}",
+  "Single"   : "${JUST_VAR}",
+  "Combined" : "${VARPART1}:${VARPART2}",
+  "nosee"    : "${NOEXISTING} + another ${EMPTY} var"
+}

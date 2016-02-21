@@ -1,0 +1,27 @@
+{
+  "Customers": {
+    "dbName": "from_default_json",
+    "dbPassword": "ABC",
+    "dbPassword2": "XYZ",
+    "lang": [
+      "en",
+      "es"
+    ]
+  },
+  "AnotherModule": {
+    "parm1": "value3"
+  },
+  "staticArray": [
+    4,
+    5,
+    6
+  ],
+  "Inline": {
+    "a": "",
+    "b": "1"
+  },
+  "ContainsQuote": "\"this has a quote\"",
+  "MoreComplexQuote": "<a href=\"http://localhost:3000/offers/reply?id=${{system.contact.value}}\">Test String</a>",
+  "Single": "A VAR",
+  "Combined": "COMBINED VAR 1/2:COMBINED VAR 2/2"
+}

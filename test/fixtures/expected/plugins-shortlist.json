@@ -1,0 +1,52 @@
+{
+  "Customers": {
+    "dbName": "override_from_runtime_json",
+    "dbPassword": "ABC",
+    "dbPassword2": "XYZ",
+    "lang": [
+      "en",
+      "es"
+    ],
+    "altDbPort": 4400,
+    "altDbPort1": 2209
+  },
+  "AnotherModule": {
+    "parm4": "value4",
+    "parmCS": "cson",
+    "parm1": "value1",
+    "parm5": "value5",
+    "parm2yml": "value2yml",
+    "parm7": "value7"
+  },
+  "staticArray": [
+    2,
+    1,
+    3
+  ],
+  "Inline": {
+    "a": "",
+    "b": "1"
+  },
+  "ContainsQuote": "\"this has a quote\"",
+  "MoreComplexQuote": "<a href=\"http://localhost:3000/offers/reply?id={{system.contact.value}}\">Test String</a>",
+  "key with spaces": {
+    "another_key": "hello"
+  },
+  "replacement": {
+    "root": "foo",
+    "param": "foobar"
+  },
+  "section": {
+    "param": "something"
+  },
+  "Single": "A VAR",
+  "Combined": "COMBINED VAR 1/2:COMBINED VAR 2/2",
+  "TestModule": {
+    "parm3": 1234
+  },
+  "watchThisValue": 10788,
+  "dynamicArray": [
+    99287,
+    72082
+  ]
+}
