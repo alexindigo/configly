@@ -16,7 +16,7 @@ config.FILES.splice(config.FILES.indexOf('local'), 0, 'test-custom');
 var ini        = require('ini');
 var cson       = require('cson');
 var yaml       = require('js-yaml');
-var properties = require ('properties');
+var properties = require('properties');
 var json5      = require('json5');
 
 // the rest

@@ -38,6 +38,7 @@ configly._compareExtensions = compare.ascendingIgnoreCase;
 
 // defaults
 configly.DEFAULTS = {
+  directory    : './config',
   environment  : 'development',
   customEnvVars: 'custom-environment-variables'
 };
@@ -81,8 +82,9 @@ function configly(directory, parsers)
 {
   var cacheKey;
 
-  // fallback to default parsers if needed
-  parsers = parsers || configly.PARSERS;
+  // fallback to defaults
+  directory = directory || configly.DEFAULTS.directory;
+  parsers   = parsers || configly.PARSERS;
 
   // prepare cache key
   cacheKey = configly._getCacheKey(directory, parsers);
@@ -92,7 +94,8 @@ function configly(directory, parsers)
     configly.load(directory, parsers);
   }
 
-  return configly._cache[cacheKey];
+  // return immutable copy
+  return merge(configly._cache[cacheKey]);
 }
 
 /**
@@ -111,8 +114,9 @@ function load(directory, parsers)
     , cacheKey
     ;
 
-  // fallback to default parsers if needed
-  parsers = parsers || configly.PARSERS;
+  // fallback to defaults
+  directory = directory || configly.DEFAULTS.directory;
+  parsers   = parsers || configly.PARSERS;
 
   // prepare cache key
   cacheKey = configly._getCacheKey(directory, parsers);
@@ -126,8 +130,8 @@ function load(directory, parsers)
   // merge loaded layers
   configly._cache[cacheKey] = configly._mergeLayers(layers);
 
-  // return results
-  return configly._cache[cacheKey];
+  // return immutable copy
+  return merge(configly._cache[cacheKey]);
 }
 
 /**
