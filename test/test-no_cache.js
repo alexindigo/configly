@@ -19,19 +19,19 @@ process.env['VARPART2']    = 'COMBINED VAR 2/2';
 
 sinon.spy(fs, 'readFileSync');
 
-// directly load files without caching
+// directly load files without checking for cache
 configObj = config.load(configDir);
 tap.same(configObj, expected, 'expects to get proper config object');
 tap.equals(fs.readFileSync.callCount, 4, 'expects to read each file each time');
 
 // oops, I did it again
 
+// directly load files without checking for cache
 configObj = config.load(configDir);
 tap.same(configObj, expected, 'expects to get proper config object, again');
 tap.equals(fs.readFileSync.callCount, 8, 'expects to read each file again');
 
-// and it shouldn't be in the cache either
-
+// and it should be in the cache already
 configObj = config(configDir);
 tap.same(configObj, expected, 'expects to get proper config object, again');
-tap.equals(fs.readFileSync.callCount, 12, 'expects to read each file once again');
+tap.equals(fs.readFileSync.callCount, 8, 'expects not to read files again');

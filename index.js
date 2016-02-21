@@ -4,6 +4,7 @@ var Module   = require('module')
   , os       = require('os')
   , merge    = require('deeply')
   , stripBOM = require('strip-bom')
+  , compare  = require('compare-property')
   // local files
   , envVars     = require('./lib/env_vars.js')
   , notEmpty    = require('./lib/not_empty.js')
@@ -29,9 +30,11 @@ configly._arrayMerge        = arrayMerge;
 configly._applyHooks        = applyHooks;
 configly._resolveDir        = resolveDir;
 configly._resolveExts       = resolveExts;
+configly._getCacheKey       = getCacheKey;
 configly._loadContent       = loadContent;
 configly._mergeLayers       = mergeLayers;
-configly._compareExtensions = compareExtensions;
+configly._compare           = compare;
+configly._compareExtensions = compare.ascendingIgnoreCase;
 
 // defaults
 configly.DEFAULTS = {
@@ -76,27 +79,20 @@ configly.HOOKS[configly.DEFAULTS.customEnvVars] = envVars;
  */
 function configly(directory, parsers)
 {
-  var extensions
-    , cacheKey
-    , result
-    ;
+  var cacheKey;
 
   // fallback to default parsers if needed
   parsers = parsers || configly.PARSERS;
 
-  // prepare cache keys
-  directory  = configly._resolveDir(directory);
-  extensions = configly._resolveExts(parsers);
-  cacheKey   = directory + ':' + extensions;
+  // prepare cache key
+  cacheKey = configly._getCacheKey(directory, parsers);
 
   if (!configly._cache[cacheKey])
   {
-    configly._cache[cacheKey] = configly.load(directory, parsers);
+    configly.load(directory, parsers);
   }
 
-  result = configly._cache[cacheKey];
-
-  return result;
+  return configly._cache[cacheKey];
 }
 
 /**
@@ -110,10 +106,16 @@ function configly(directory, parsers)
  */
 function load(directory, parsers)
 {
-  var files, layers, result;
+  var files
+    , layers
+    , cacheKey
+    ;
 
   // fallback to default parsers if needed
   parsers = parsers || configly.PARSERS;
+
+  // prepare cache key
+  cacheKey = configly._getCacheKey(directory, parsers);
 
   // get config files names suitable for the situation
   files = configly._getFiles(process.env);
@@ -122,9 +124,10 @@ function load(directory, parsers)
   layers = configly._loadFiles(directory, files, parsers);
 
   // merge loaded layers
-  result = configly._mergeLayers(layers);
+  configly._cache[cacheKey] = configly._mergeLayers(layers);
 
-  return result;
+  // return results
+  return configly._cache[cacheKey];
 }
 
 /**
@@ -167,7 +170,7 @@ function getFiles(env)
 function loadFiles(dir, files, parsers)
 {
   // sort extensions to provide deterministic order of loading
-  var extensions = Object.keys(parsers).sort(configly._compareExtensions)
+  var extensions = configly._resolveExts(parsers)
     , layers     = []
     ;
 
@@ -342,7 +345,20 @@ function resolveDir(dir)
  */
 function resolveExts(parsers)
 {
-  return Object.keys(parsers).sort().join(',');
+  return Object.keys(parsers).sort(configly._compareExtensions);
+}
+
+/**
+ * Generates cache key from the search directory
+ * and provided list of parsers
+ *
+ * @param   {string} directory - search directory
+ * @param   {object} parsers - list of parsers
+ * @returns {string} - cache key
+ */
+function getCacheKey(directory, parsers)
+{
+  return configly._resolveDir(directory) + ':' + configly._resolveExts(parsers).join(',');
 }
 
 /**
@@ -363,18 +379,6 @@ function jsCompile(content, file)
   jsMod._compile(content, file);
   // return just exported object
   return jsMod.exports;
-}
-
-/**
- * Compares extensions alphabetically (ascending)
- *
- * @param   {string} a - array element to compare
- * @param   {string} b - array element to compare
- * @returns {number} - ordering criterion
- */
-function compareExtensions(a, b)
-{
-  return a === b ? 0 : (a < b ? -1 : 1);
 }
 
 /**

@@ -1,10 +1,14 @@
-var testName = 'plugins';
-var tap      = require('tap');
-var path     = require('path');
-var merge    = require('deeply');
-var config   = require('../');
+var testName  = 'plugins';
+var tap       = require('tap');
+var path      = require('path');
+var merge     = require('deeply');
+var config    = require('../');
+var configDir = path.join(__dirname, 'fixtures/config/' + testName);
+var configObj;
 
-// TODO: custom names - `test.yaml`
+// custom lookup file
+// inject one before `local` basename
+config.FILES.splice(config.FILES.indexOf('local'), 0, 'test-custom');
 
 // custom parsers
 
@@ -20,8 +24,9 @@ var coffeeScript = require('coffee-script');
 var hjson        = require('hjson');
 var toml         = require('toml');
 
-var expectedShort = require('./fixtures/expected/' + testName + '-shortlist.json');
-var expectedAll   = require('./fixtures/expected/' + testName + '-all.json');
+var expectedShort    = require('./fixtures/expected/' + testName + '-shortlist.json');
+var expectedAll      = require('./fixtures/expected/' + testName + '-all.json');
+var expectedReversed = require('./fixtures/expected/' + testName + '-all-reversed.json');
 
 // assemble shortlist
 var parsersShortList = {
@@ -50,7 +55,6 @@ var parsersAll = merge(parsersShortList, {
   json  : config.PARSERS.json
 });
 
-var configObj;
 
 // augment `process.env` for stable testing`
 process.env['NODE_APP_INSTANCE'] = 3;
@@ -62,12 +66,20 @@ process.env['VARPART1']    = 'COMBINED VAR 1/2';
 process.env['VARPART2']    = 'COMBINED VAR 2/2';
 
 // get short list first, and keep original
-configObj = config(path.join(__dirname, 'fixtures/config/' + testName), parsersShortList);
+configObj = config(configDir, parsersShortList);
 tap.same(configObj, expectedShort, 'expects to get proper config object for the short list');
 
 // get all the files
-configObj = config(path.join(__dirname, 'fixtures/config/' + testName), parsersAll);
+configObj = config(configDir, parsersAll);
 tap.same(configObj, expectedAll, 'expects to get proper config object for the full list');
+
+// get all the files with extensions in reversed order
+// replace default compare function with opposite one,
+// since extension yield different order,
+// it would pass the cache and re-read files one more time
+config._compareExtensions = config._compare.descendingIgnoreCase;
+configObj = config(configDir, parsersAll);
+tap.same(configObj, expectedReversed, 'expects to get proper config object for the full list and reversed extensions');
 
 /**
  * Compiles coffee-script content

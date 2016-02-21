@@ -1,3 +1,6 @@
 
 Customers:
   altDbPort1: 2209
+
+Local-3:
+  ext: yml

@@ -8,8 +8,6 @@ A lightweight replacement for the `config` module that works with custom config 
 [![Coverage Status](https://img.shields.io/coveralls/alexindigo/configly/master.svg?label=code+coverage&style=flat)](https://coveralls.io/github/alexindigo/configly?branch=master)
 [![Dependency Status](https://img.shields.io/david/alexindigo/configly.svg?style=flat)](https://david-dm.org/alexindigo/configly)
 
-[![bitHound Overall Score](https://www.bithound.io/github/alexindigo/configly/badges/score.svg)](https://www.bithound.io/github/alexindigo/configly)
-
 ## Install
 
 ```

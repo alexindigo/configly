@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint index.js test/*.js",
     "debug": "node test.js --test ok",
-    "test": "nyc --reporter=lcov --reporter=text --check-coverage --lines 95 --functions 99 --branches 80 tap test/*.js"
+    "test": "nyc --reporter=lcov --reporter=text --check-coverage --lines 99 --functions 99 --branches 99 tap test/*.js"
   },
   "pre-commit": [
     "lint",
@@ -37,6 +37,7 @@
     "url": "https://github.com/alexindigo/configly/issues"
   },
   "dependencies": {
+    "compare-property": "^2.0.0",
     "deeply": "^1.0.0",
     "strip-bom": "^2.0.0"
   },

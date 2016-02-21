@@ -3,6 +3,7 @@ var tap      = require('tap');
 var path     = require('path');
 var config   = require('../');
 var expected = require('./fixtures/expected/' + testName + '.json');
+var configDir = path.join(__dirname, 'fixtures/config/' + testName);
 var configObj;
 
 // augment `process.env` for stable testing`
@@ -14,6 +15,6 @@ process.env['JUST_VAR']    = 'A VAR';
 process.env['VARPART1']    = 'COMBINED VAR 1/2';
 process.env['VARPART2']    = 'COMBINED VAR 2/2';
 
-configObj = config(path.join(__dirname, 'fixtures/config/' + testName));
+configObj = config(configDir);
 
 tap.same(configObj, expected, 'expects to get proper config object');

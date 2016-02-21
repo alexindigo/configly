@@ -39,6 +39,9 @@
   "section": {
     "param": "something"
   },
+  "Local-3": {
+    "ext": "yml"
+  },
   "Single": "A VAR",
   "Combined": "COMBINED VAR 1/2:COMBINED VAR 2/2",
   "TestModule": {
