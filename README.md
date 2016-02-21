@@ -39,7 +39,7 @@ relative to the current working directory (`process.cwd()`).
 
 It will cache the result, so files will be read only once per process.
 
-### Pluggable formats and parsers
+### Pluggable Formats and Parsers
 
 Out of the box `configly` supports only two formats (`.js` and `.json`), but developers can add their own parsers and support for more formats (e.g. `.ini`, `.yaml`, `.cson`).
 
@@ -74,7 +74,7 @@ var configObj = config();
 Since `configly` is a singleton, this setup could be done in your index file,
 and the rest of the files would use it the same way as in the "Basic" example.
 
-### Custom config directory
+### Custom Config Directory
 
 To load config files from a custom directory, just specify it as the first argument.
 
@@ -107,7 +107,7 @@ configly.DEFAULTS.directory = path.join(__dirname, 'etc');
 var config = require('configly')();
 ```
 
-### Additional config directories
+### Additional Config Directories
 
 It is possible to load files from more than one config directory within one application/module.
 
@@ -130,7 +130,7 @@ var merge     = require('deeply');
 var allConfig = merge(appConfig, rulesConfig);
 ```
 
-### More examples
+### More Examples
 
 For more examples check out [test directory](test/).
 
@@ -138,18 +138,22 @@ For more examples check out [test directory](test/).
 
 Main differences between `configly` and `config`:
 
-- Configly doesn't read/write `NODE_CONFIG` environment variable.
-- Configly doesn't pollute your logs with warnings of non-existent files,
-  it will either throw (if couldn't read/parse a file) or be silent.
-- Configly doesn't provide `get`, `has` methods, it returns pure js object.
-- Configly doesn't auto-strip comments from JSON files, use `configly.PARSERS['json'] = json5.parse;`.
-
+### Does
 
 - Configly provides deterministic (and controllable) order of the config files it loads from.
 - Configly provides deterministic (and controllable) order of the file extensions it loads from.
 - Configly provides post-load hooks for config files, (e.g. `custom-environment-variables` works via this mechanism).
 - Configly provides ability to combine environment variables within one entry (e.g. `"endpoint": "${REMOTE_HOST}:${REMOTE_PORT}"`).
 - Configly provides access to the underlying functions and defaults, allowing to utilize parts of the functionality for greater flexibility.
+
+### Does Not
+
+- Configly doesn't read/write `NODE_CONFIG` environment variable.
+- Configly doesn't pollute your logs with warnings of non-existent files,
+  it will either throw (if couldn't read/parse a file) or be silent.
+- Configly doesn't provide `get`, `has` methods, it returns pure js object.
+- Configly doesn't auto-strip comments from JSON files, use `configly.PARSERS['json'] = json5.parse;`.
+
 
 ## License
 
