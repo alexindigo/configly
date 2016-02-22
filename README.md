@@ -121,13 +121,12 @@ var appConfig   = configly(path.join(__dirname, 'app-config'));
 var rulesConfig = configly(path.join(__dirname, 'rules-config'), {ini: ini.parse});
 ```
 
-If there is a need to merge config objects into one,
-you can use [deeply](http://npmjs.org/deeply) module
-or any other package that provides deep merging.
+If there is a need to merge standalone config objects into one,
+you can use `configly.merge` method manually,
+in the order that suites your specific use case.
 
 ```javascript
-var merge     = require('deeply');
-var allConfig = merge(appConfig, rulesConfig);
+var oneConfig = configly.merge(appConfig, rulesConfig);
 ```
 
 ### More Examples

@@ -22,6 +22,7 @@ configly._cache = {};
 
 // expose helper functions
 configly.load               = load;
+configly.merge              = merge;
 // "private" methods
 configly._stripBOM          = stripBOM;
 configly._getFiles          = getFiles;
