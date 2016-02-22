@@ -1,7 +1,7 @@
 {
   "name": "configly",
-  "version": "3.1.0",
-  "description": "A developer-friendly lightweight replacement for the \"config\" module that works with custom config directory and pluggable parsers",
+  "version": "3.1.1",
+  "description": "A developer-friendly lightweight replacement for the 'config' module that works with custom config directory and pluggable parsers",
   "main": "index.js",
   "scripts": {
     "lint": "eslint index.js test/*.js",
