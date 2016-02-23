@@ -20,7 +20,7 @@ $ npm install --save configly
 
 Original `config` module is convenient and easy to start with library, but in the same time being focused that much on "easy" it lacks certain features to be a _"developer friendly"_ library.
 
-This package is addressing those issues, while keeping easy of use and featureset on par with the original module.
+This package is addressing those issues, while keeping easy of use and feature set on par with the original module.
 
 ## Usage
 
@@ -79,7 +79,7 @@ and the rest of the files would use it the same way as in the "Basic" example.
 To load config files from a custom directory, just specify it as the first argument.
 
 ```javascript
-var config = require('configly')('./etc'); // `require('configly')('./etc');` would work the same way`
+var config = require('configly')('./etc'); // `require('configly')('etc');` would work the same way`
 ```
 
 It will load files from the `etc` folder relative to the current working directory,
@@ -150,7 +150,7 @@ Main differences between `configly` and `config`:
 - Configly doesn't read/write `NODE_CONFIG` environment variable.
 - Configly doesn't pollute your logs with warnings of non-existent files,
   it will either throw (if couldn't read/parse a file) or be silent.
-- Configly doesn't provide `get`, `has` methods, it returns pure js object.
+- Configly doesn't provide `get`, `has` methods, it always returns pure js (POJO) object.
 - Configly doesn't auto-strip comments from JSON files, use `configly.PARSERS['json'] = json5.parse;`.
 
 
