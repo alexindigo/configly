@@ -1,6 +1,6 @@
 {
   "name": "configly",
-  "version": "3.1.2",
+  "version": "4.0.0",
   "description": "A developer-friendly lightweight replacement for the 'config' module that works with custom config directory and pluggable parsers",
   "main": "index.js",
   "scripts": {
@@ -47,7 +47,7 @@
   },
   "dependencies": {
     "compare-property": "^2.0.0",
-    "deeply": "^1.0.0",
+    "deeply": "^2.0.0",
     "strip-bom": "^2.0.0"
   },
   "devDependencies": {

@@ -7,10 +7,16 @@ var configDir = path.join(__dirname, 'fixtures/config/' + testName);
 var configObj;
 
 // override arrayMerge function
-// concat array instead of replacing
-config._arrayMerge = function(a, b)
+// concat arrays instead of replacing
+config._arrayMerge = function(to, from, merge)
 {
-  return a.concat(b);
+  from.reduce(function(target, value)
+  {
+    target.push(merge(undefined, value));
+    return target;
+  }, to);
+
+  return to;
 };
 
 configObj = config(configDir);

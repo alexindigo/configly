@@ -79,7 +79,7 @@ and the rest of the files would use it the same way as in the "Basic" example.
 To load config files from a custom directory, just specify it as the first argument.
 
 ```javascript
-var config = require('configly')('./etc'); // `require('configly')('etc');` would work the same way`
+var config = require('configly')('./etc'); // `require('configly')('etc');` would work the same way
 ```
 
 It will load files from the `etc` folder relative to the current working directory,

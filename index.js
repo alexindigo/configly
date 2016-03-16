@@ -27,7 +27,7 @@ configly.merge              = merge;
 configly._stripBOM          = stripBOM;
 configly._getFiles          = getFiles;
 configly._loadFiles         = loadFiles;
-configly._arrayMerge        = arrayMerge;
+configly._arrayMerge        = merge.adapters.array;
 configly._applyHooks        = applyHooks;
 configly._resolveDir        = resolveDir;
 configly._resolveExts       = resolveExts;
@@ -279,7 +279,7 @@ function mergeLayers(layers)
     layer.exts.forEach(function(cfg)
     {
       // have customizable's array merge function
-      result = merge(result, cfg.config, configly._arrayMerge);
+      result = merge.call({useCustomAdapters: merge.behaviors.useCustomAdapters, 'array': configly._arrayMerge}, result, cfg.config);
     });
   });
 
@@ -384,16 +384,4 @@ function jsCompile(content, file)
   jsMod._compile(content, file);
   // return just exported object
   return jsMod.exports;
-}
-
-/**
- * Default array merge strategy – replace `a` with `b`
- *
- * @param   {mixed} a - one array element
- * @param   {mixed} b - another array element
- * @returns {mixed} - result of the merge of the array
- */
-function arrayMerge(a, b)
-{
-  return b;
 }
