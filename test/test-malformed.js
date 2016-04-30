@@ -1,12 +1,17 @@
 var testName  = 'malformed';
-var tap       = require('tap');
+var test      = require('tape');
 var path      = require('path');
 var config    = require('../');
 var configDir = path.join(__dirname, 'fixtures/config/' + testName);
 
-tap.throws(function()
+test('malformed', function(t)
 {
-  config(configDir);
-},
-{message: 'default.json cannot be read or malformed'},
-'expects to throw on malformed config file');
+  t.plan(1);
+
+  t.throws(function()
+  {
+    config(configDir);
+  },
+  {message: 'default.json cannot be read or malformed'},
+  'expects to throw on malformed config file');
+});

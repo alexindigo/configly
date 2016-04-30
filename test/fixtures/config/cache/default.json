@@ -1,4 +1,5 @@
 {
+  "regularString": "Should not be ${parsed}",
   "Customers": {
     "dbName":"from_default_json",
     "dbPassword":"password will be overwritten.",

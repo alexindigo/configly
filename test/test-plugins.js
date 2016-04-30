@@ -1,14 +1,15 @@
 var testName  = 'plugins';
-var tap       = require('tap');
+var test      = require('tape');
 var path      = require('path');
 var merge     = require('deeply');
 var config    = require('../');
+var compare   = require('../compare');
 var configDir = path.join(__dirname, 'fixtures/config/' + testName);
-var configObj;
 
 // custom lookup file
 // inject one before `local` basename
-config.FILES.splice(config.FILES.indexOf('local'), 0, 'test-custom');
+// modify properties in place (be careful in production code)
+config.files.splice(config.files.indexOf('local'), 0, 'test-custom');
 
 // custom parsers
 
@@ -37,11 +38,13 @@ var parsersShortList = {
   // same options as used within `config` module
   properties: function(str) { return properties.parse(str, {namespaces: true, variables: true, sections: true}); },
   // use json5 for regular json files
-  json: json5.parse
+  json      : json5.parse,
+  // exclude default parser explicitly
+  js        : null
 };
 
 // get them all
-var parsersAll = merge(parsersShortList, {
+var parsersLongList = merge(parsersShortList, {
   hjson : hjson.parse,
   toml  : toml.parse,
   // coffee-script requires some wrapping too
@@ -51,35 +54,55 @@ var parsersAll = merge(parsersShortList, {
   // make yaml to parse two extensions
   yaml  : parsersShortList.yml,
   // add reuse original parsers
-  js    : config.PARSERS.js,
-  json  : config.PARSERS.json
+  js    : config.parsers.js,
+  json  : config.parsers.json
 });
 
+test('plugins', function(t)
+{
+  t.plan(6);
 
-// augment `process.env` for stable testing`
-process.env['NODE_APP_INSTANCE'] = 3;
-process.env['EMPTY_VAR']   = '';
-process.env['TESTLINEONE'] = 'ABC';
-process.env['TESTLINETWO'] = 'XYZ';
-process.env['JUST_VAR']    = 'A VAR';
-process.env['VARPART1']    = 'COMBINED VAR 1/2';
-process.env['VARPART2']    = 'COMBINED VAR 2/2';
+  var configObj
+      // and using new copy
+    , configWithShortList    = config.new({parsers: parsersShortList})
+    , configWithLongList     = config.new({parsers: parsersLongList})
+    , configWithLongListDesc = config.new({parsers: parsersLongList, compareExtensions: compare.descendingIgnoreCase})
+    ;
 
-// get short list first, and keep original
-configObj = config(configDir, parsersShortList);
-tap.same(configObj, expectedShort, 'expects to get proper config object for the short list');
+  // augment `process.env` for stable testing`
+  process.env['NODE_APP_INSTANCE'] = 3;
+  process.env['EMPTY_VAR']         = '';
+  process.env['TESTLINEONE']       = 'ABC';
+  process.env['TESTLINETWO']       = 'XYZ';
+  process.env['JUST_VAR']          = 'A VAR';
+  process.env['VARPART1']          = 'COMBINED VAR 1/2';
+  process.env['VARPART2']          = 'COMBINED VAR 2/2';
 
-// get all the files
-configObj = config(configDir, parsersAll);
-tap.same(configObj, expectedAll, 'expects to get proper config object for the full list');
+  // get short list first, and keep original
+  configObj = config(configDir, {parsers: parsersShortList});
+  t.deepEqual(configObj, expectedShort, 'expects to get proper config object for the short list');
 
-// get all the files with extensions in reversed order
-// replace default compare function with opposite one,
-// since extension yield different order,
-// it would pass the cache and re-read files one more time
-config._compareExtensions = config._compare.descendingIgnoreCase;
-configObj = config(configDir, parsersAll);
-tap.same(configObj, expectedReversed, 'expects to get proper config object for the full list and reversed extensions');
+  configObj = configWithShortList(configDir);
+  t.deepEqual(configObj, expectedShort, 'expects to get proper config object for copy of the short list');
+
+  // get all the files
+  configObj = config(configDir, {parsers: parsersLongList});
+  t.deepEqual(configObj, expectedAll, 'expects to get proper config object for the full list');
+
+  configObj = configWithLongList(configDir);
+  t.deepEqual(configObj, expectedAll, 'expects to get proper config object for copy of the full list');
+
+  // get all the files with extensions in reversed order
+  // replace default compare function with opposite one,
+  // since extension yield different order,
+  // it would pass the cache and re-read files one more time
+  configObj = config(configDir, {parsers: parsersLongList, compareExtensions: compare.descendingIgnoreCase});
+  t.deepEqual(configObj, expectedReversed, 'expects to get proper config object for the full list and reversed extensions');
+
+  configObj = configWithLongListDesc(configDir);
+  t.deepEqual(configObj, expectedReversed, 'expects to get proper config object for copy of the full list and reversed extensions');
+
+});
 
 /**
  * Compiles coffee-script content
@@ -98,5 +121,5 @@ function coffeeCompile(content, file)
   });
 
   // then proceed as usual with fetched js content
-  return config.PARSERS.js(properJs, file);
+  return config.parsers.js(properJs, file);
 }

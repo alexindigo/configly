@@ -1,14 +1,19 @@
-var testName = 'immutable';
-var tap      = require('tap');
-var path     = require('path');
-var config   = require('../');
+var testName  = 'immutable';
+var test      = require('tape');
+var path      = require('path');
+var config    = require('../');
 var configDir = path.join(__dirname, 'fixtures/config/' + testName);
-var configObjA, configObjB;
 
-configObjA = config(configDir);
-configObjB = config(configDir);
+test('immutable', function(t)
+{
+  t.plan(1);
 
-// mutate
-configObjA.Customers.dbName = 'mutated';
+  var configObjA, configObjB;
 
-tap.notSame(configObjA, configObjB, 'expects config objects to be different');
+  configObjA = config(configDir);
+  configObjB = config(configDir);
+
+  // mutate
+  configObjA.Customers.dbName = 'mutated';
+  t.notDeepEqual(configObjA, configObjB, 'expects config objects to be different');
+});

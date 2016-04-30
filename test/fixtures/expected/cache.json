@@ -20,6 +20,7 @@
     "a": "",
     "b": "1"
   },
+  "regularString": "Should not be ${parsed}",
   "ContainsQuote": "\"this has a quote\"",
   "MoreComplexQuote": "<a href=\"http://localhost:3000/offers/reply?id=${{system.contact.value}}\">Test String</a>",
   "Single": "A VAR",

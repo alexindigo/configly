@@ -1,74 +1,80 @@
-var Module   = require('module')
-  , path     = require('path')
-  , fs       = require('fs')
-  , os       = require('os')
-  , merge    = require('deeply')
-  , stripBOM = require('strip-bom')
-  , compare  = require('compare-property')
+var Module        = require('module')
+  , path          = require('path')
+  , fs            = require('fs')
+  , os            = require('os')
+  , merge         = require('deeply')
+  , cloneFunction = require('deeply/lib/clone_function.js')
+  , stripBOM      = require('strip-bom')
   // local files
-  , envVars     = require('./lib/env_vars.js')
-  , notEmpty    = require('./lib/not_empty.js')
-  , parseTokens = require('./lib/parse_tokens.js')
+  , compare       = require('./compare.js')
+  , envVars       = require('./lib/env_vars.js')
+  , notEmpty      = require('./lib/not_empty.js')
+  , parseTokens   = require('./lib/parse_tokens.js')
   // static
-  , hostname = process.env['HOST'] || process.env['HOSTNAME'] || os.hostname() || ''
-  , host     = hostname.split('.')[0]
+  , hostname      = process.env['HOST'] || process.env['HOSTNAME'] || os.hostname() || ''
+  , host          = hostname.split('.')[0]
   ;
 
-// Public API
-module.exports = configly;
-
 // singleton cache object
-configly._cache = {};
+configly._cache             = {};
 
 // expose helper functions
+configly.new                = createNew;
 configly.load               = load;
 configly.merge              = merge;
+// internal helpers
+configly.compareExtensions = compare.ascendingIgnoreCase;
+configly.arrayMerge        = merge.adapters.array;
+
 // "private" methods
-configly._stripBOM          = stripBOM;
-configly._getFiles          = getFiles;
-configly._loadFiles         = loadFiles;
-configly._arrayMerge        = merge.adapters.array;
-configly._applyHooks        = applyHooks;
-configly._resolveDir        = resolveDir;
-configly._resolveExts       = resolveExts;
-configly._getCacheKey       = getCacheKey;
-configly._loadContent       = loadContent;
-configly._mergeLayers       = mergeLayers;
-configly._compare           = compare;
-configly._compareExtensions = compare.ascendingIgnoreCase;
+configly._getFiles        = _getFiles;
+configly._loadFiles       = _loadFiles;
+configly._copyProps       = _copyProps;
+configly._applyProps      = _applyProps;
+configly._applyHooks      = _applyHooks;
+configly._resolveDir      = _resolveDir;
+configly._resolveExts     = _resolveExts;
+configly._resolveFiles    = _resolveFiles;
+configly._getCacheKey     = _getCacheKey;
+configly._loadContent     = _loadContent;
+configly._mergeLayers     = _mergeLayers;
+configly._addWithSuffixes = _addWithSuffixes;
 
 // defaults
-configly.DEFAULTS = {
+configly.defaults = {
   directory    : './config',
   environment  : 'development',
   customEnvVars: 'custom-environment-variables'
 };
 
 // filename chunk separator
-configly.SEPARATOR = '-';
+configly.separator = '-';
 
 // file base names
-configly.FILES = [
+configly.files = [
   'default',
   '', // allow suffixes as a basename (e.g. `environment`)
   host,
   hostname,
   'local',
-  configly.DEFAULTS.customEnvVars,
+  configly.defaults.customEnvVars,
   'runtime'
 ];
 
 // by default use just `js` and `json` parsers
-configly.PARSERS = {
+configly.parsers = {
   js  : jsCompile,
   json: JSON.parse
 };
 
 // post-processing hooks
 // matched by the filename prefix
-configly.HOOKS = {};
-configly.HOOKS[configly.DEFAULTS.customEnvVars] = envVars;
+configly.hooks = {};
+configly.hooks[configly.defaults.customEnvVars] = envVars;
 
+// Public API
+// return protected copy
+module.exports = configly.new();
 
 /**
  * Returns config object from the cache (determined by `dir`/`parsers` arguments),
@@ -76,63 +82,98 @@ configly.HOOKS[configly.DEFAULTS.customEnvVars] = envVars;
  * By default it loads JSON files, also custom pluggable parsers are supported.
  *
  * @param   {string} directory - directory to search for config files within
- * @param   {object} [parsers] - custom parsers to use to search and load config files with
+ * @param   {object} [options] - custom context to use for search and loading config files
  * @returns {object} - result merged config object
  */
-function configly(directory, parsers)
+function configly(directory, options)
 {
+  // determine current instance
+  // if current context is a function
+  // assume it as new configly instance
+  // otherwise fallback to the original one
   var cacheKey;
 
-  // fallback to defaults
-  directory = directory || configly.DEFAULTS.directory;
-  parsers   = parsers || configly.PARSERS;
+  // create new running context with custom options
+  var context = this.new(options || {});
+
+  // fallback to default directory
+  directory = directory || context.defaults.directory;
 
   // prepare cache key
-  cacheKey = configly._getCacheKey(directory, parsers);
+  cacheKey = context._getCacheKey(directory);
 
-  if (!configly._cache[cacheKey])
+  if (!this._cache[cacheKey])
   {
-    configly.load(directory, parsers);
+    this.load(directory, context);
   }
 
   // return immutable copy
-  return merge(configly._cache[cacheKey]);
+  return merge(this._cache[cacheKey]);
 }
 
 /**
- * Loads config objects from several environemnt-derived files
+ * Creates new copy of configly
+ * immutable to singleton modifications
+ * which will help to keep it stable
+ * when used with in the libraries
+ *
+ * @param   {object} [options] - custom options to set as new defaults on the new instance
+ * @returns {function} - immutable copy of configly
+ */
+function createNew(options)
+{
+  var copy     = cloneFunction(configly)
+    , instance = copy.bind(copy)
+    ;
+
+  // enrich copy with helper methods
+  // mind baked-in context of the copies
+  this._applyProps(copy, options);
+
+  // expose public methods on the outside
+  // mind baked in context of the copies
+  copy._copyProps(instance);
+
+  return instance;
+}
+
+/**
+ * Loads config objects from several environment-derived files
  * and merges them in specific order.
  * By default it loads JSON files, also custom pluggable parsers are supported.
  *
  * @param   {string} directory - directory to search for config files within
- * @param   {object} [parsers] - custom parsers to use to search and load config files with
+ * @param   {object} [context] - custom context to use for search and loading config files
  * @returns {object} - result merged config object
  */
-function load(directory, parsers)
+function load(directory, context)
 {
   var files
     , layers
     , cacheKey
     ;
 
+  // create new context
+  // in case if function called directly with options object
+  context = typeof context == 'function' ? context : this.new(context || {});
+
   // fallback to defaults
-  directory = directory || configly.DEFAULTS.directory;
-  parsers   = parsers || configly.PARSERS;
+  directory = directory || context.defaults.directory;
 
   // prepare cache key
-  cacheKey = configly._getCacheKey(directory, parsers);
+  cacheKey = context._getCacheKey(directory, context);
 
   // get config files names suitable for the situation
-  files = configly._getFiles(process.env);
+  files = context._getFiles(process.env);
 
   // load all available files
-  layers = configly._loadFiles(directory, files, parsers);
+  layers = context._loadFiles(directory, files);
 
   // merge loaded layers
-  configly._cache[cacheKey] = configly._mergeLayers(layers);
+  this._cache[cacheKey] = context._mergeLayers(layers);
 
   // return immutable copy
-  return merge(configly._cache[cacheKey]);
+  return merge(this._cache[cacheKey]);
 }
 
 /**
@@ -142,24 +183,24 @@ function load(directory, parsers)
  * @param   {object} env - environment-like object (e.g. `process.env`)
  * @returns {array} - ordered list of config files to load
  */
-function getFiles(env)
+function _getFiles(env)
 {
   var files       = []
-    , environment = env['NODE_ENV'] || configly.DEFAULTS.environment
+    , environment = env['NODE_ENV'] || this.defaults.environment
     , appInstance = env['NODE_APP_INSTANCE']
     ;
 
   // generate config files variations
-  configly.FILES.forEach(function(baseName)
+  this.files.forEach(function(baseName)
   {
     // check for variables
     // keep baseName if no variables found
     baseName = parseTokens(baseName, env) || baseName;
 
     // add base name with available suffixes
-    addWithSuffixes(files, baseName, appInstance);
-    addWithSuffixes(files, baseName, environment, appInstance);
-  });
+    this._addWithSuffixes(files, baseName, appInstance);
+    this._addWithSuffixes(files, baseName, environment, appInstance);
+  }.bind(this));
 
   return files;
 }
@@ -169,13 +210,12 @@ function getFiles(env)
  *
  * @param   {string} dir - directory to search in
  * @param   {array} files - list of files to search for
- * @param   {object} parsers - list of extensions to use with parsers for each
  * @returns {array} - list of loaded configs in order of provided files
  */
-function loadFiles(dir, files, parsers)
+function _loadFiles(dir, files)
 {
   // sort extensions to provide deterministic order of loading
-  var extensions = configly._resolveExts(parsers)
+  var extensions = this._resolveExts()
     , layers     = []
     ;
 
@@ -189,17 +229,17 @@ function loadFiles(dir, files, parsers)
 
       if (fs.existsSync(file))
       {
-        cfg = configly._loadContent(file, parsers[ext]);
+        cfg = this._loadContent(file, this.parsers[ext]);
 
         // check if any hooks needed to be applied
-        cfg = configly._applyHooks(cfg, filename);
+        cfg = this._applyHooks(cfg, filename);
 
         layer.exts.push({
           ext   : ext,
           config: cfg
         });
       }
-    });
+    }.bind(this));
 
     // populate with non-empty layers only
     if (layer.exts.length)
@@ -207,7 +247,7 @@ function loadFiles(dir, files, parsers)
       layers.push(layer);
     }
 
-  });
+  }.bind(this));
 
   return layers;
 }
@@ -219,7 +259,7 @@ function loadFiles(dir, files, parsers)
  * @param   {function} parser - function to parse provided content and return config object
  * @returns {object} - parsed config object
  */
-function loadContent(file, parser)
+function _loadContent(file, parser)
 {
   var content, config;
 
@@ -248,17 +288,17 @@ function loadContent(file, parser)
  * @param   {string} filename - base filename to match hooks against
  * @returns {object} - modified config object
  */
-function applyHooks(config, filename)
+function _applyHooks(config, filename)
 {
-  Object.keys(configly.HOOKS).forEach(function(hook)
+  Object.keys(this.hooks).forEach(function(hook)
   {
     // in order to match hook should either the same length
     // as the filename or smaller
     if (filename.substr(0, hook.length) === hook)
     {
-      config = configly.HOOKS[hook](config);
+      config = this.hooks[hook](config);
     }
-  });
+  }.bind(this));
 
   return config;
 }
@@ -270,16 +310,18 @@ function applyHooks(config, filename)
  * @param   {array} layers - list of config objects
  * @returns {object} - single config object
  */
-function mergeLayers(layers)
+function _mergeLayers(layers)
 {
-  var result = {};
+  var _instance = this
+    , result    = {}
+    ;
 
   layers.forEach(function(layer)
   {
     layer.exts.forEach(function(cfg)
     {
       // have customizable's array merge function
-      result = merge.call({useCustomAdapters: merge.behaviors.useCustomAdapters, 'array': configly._arrayMerge}, result, cfg.config);
+      result = merge.call({useCustomAdapters: merge.behaviors.useCustomAdapters, 'array': _instance.arrayMerge}, result, cfg.config);
     });
   });
 
@@ -296,7 +338,7 @@ function mergeLayers(layers)
  * @param {string} baseName - element to compare against, affects rest of the arguments
  * @param {...string} [suffix] - additional suffixes to use with the `baseName`
  */
-function addWithSuffixes(list, baseName)
+function _addWithSuffixes(list, baseName)
 {
   var suffixes = Array.prototype.slice.call(arguments, 2);
 
@@ -309,10 +351,10 @@ function addWithSuffixes(list, baseName)
     // and extend baseName
     if (notEmpty(suffix))
     {
-      baseName += (baseName ? configly.SEPARATOR : '') + suffix;
+      baseName += (baseName ? this.separator : '') + suffix;
       pushUniquely(list, baseName);
     }
-  });
+  }.bind(this));
 }
 
 /**
@@ -331,26 +373,85 @@ function pushUniquely(list, element)
 }
 
 /**
+ * Applies properties from the source function onto target one
+ *
+ * @param   {function} target - function to enrich
+ * @param   {object} [options] - custom props to overload with
+ * @returns {function} enriched target
+ */
+function _applyProps(target, options)
+{
+  options = options || {};
+
+  Object.keys(this).forEach(function(key)
+  {
+    target[key] = merge(this[key], options[key]);
+
+    // special treatment for parsers
+    // remove invalid parsers from the list
+    if (key == 'parsers')
+    {
+      Object.keys(target[key]).forEach(function(parser)
+      {
+        if (typeof target[key][parser] != 'function')
+        {
+          delete target[key][parser];
+        }
+      });
+    }
+
+  }.bind(this));
+
+  return target;
+}
+
+/**
+ * Copies public properties to the provided target
+ *
+ * @param   {object} target - properties copy destination
+ * @returns {object} - updated target object
+ */
+function _copyProps(target)
+{
+  Object.keys(this).forEach(function(key)
+  {
+    target[key] = typeof this[key] == 'function' ? this[key].bind(this) : this[key];
+  }.bind(this));
+
+  return target;
+}
+
+/**
  * Resolves `dir` argument into a absolute path
  *
  * @param   {string} dir - directory to resolve
  * @returns {string} - absolute path to the directory
  */
-function resolveDir(dir)
+function _resolveDir(dir)
 {
   return path.resolve(dir);
+}
+
+/**
+ * Resolves look up files into a string
+ * of sorted filenames
+ *
+ * @returns {string} - possible filenames (e.g. `[default, development, custom-environment-variables]`)
+ */
+function _resolveFiles()
+{
+  return this._getFiles(process.env, this.files);
 }
 
 /**
  * Resolves parsers object into a string
  * of sorted extensions
  *
- * @param   {object} parsers - list of parsers with corresponding extensions
- * @returns {string} - sorted extensions string (e.g. `cson,json,zson`)
+ * @returns {array} - sorted extensions  (e.g. `[cson, json, zson]`)
  */
-function resolveExts(parsers)
+function _resolveExts()
 {
-  return Object.keys(parsers).sort(configly._compareExtensions);
+  return Object.keys(this.parsers).sort(this.compareExtensions);
 }
 
 /**
@@ -358,12 +459,16 @@ function resolveExts(parsers)
  * and provided list of parsers
  *
  * @param   {string} directory - search directory
- * @param   {object} parsers - list of parsers
  * @returns {string} - cache key
  */
-function getCacheKey(directory, parsers)
+function _getCacheKey(directory)
 {
-  return configly._resolveDir(directory) + ':' + configly._resolveExts(parsers).join(',');
+  return this._resolveDir(directory)
+    + ':'
+    + this._resolveFiles().join(',')
+    + ':'
+    + this._resolveExts().join(',')
+    ;
 }
 
 /**

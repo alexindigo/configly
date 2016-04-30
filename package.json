@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint index.js test/*.js",
-    "test": "nyc --reporter=lcov --reporter=text --check-coverage --lines 99 --functions 99 --branches 99 tap test/*.js"
+    "test": "nyc --reporter=lcov --reporter=text --check-coverage --lines 99 --functions 99 --branches 99 tape test/*.js | tap-spec",
+    "debug": "tape test/*.js | tap-spec"
   },
   "pre-commit": [
     "lint",
@@ -63,7 +64,8 @@
     "pre-commit": "^1.1.2",
     "properties": "^1.2.1",
     "sinon": "^1.17.3",
-    "tap": "^5.6.0",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.5.1",
     "toml": "^2.3.0"
   }
 }

@@ -1,0 +1,5 @@
+# Example of the baseline configuration in YAML
+
+fields:
+  field_4: 4 from yaml
+  field_5: 5 from yaml

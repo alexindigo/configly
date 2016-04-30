@@ -4,8 +4,8 @@ module.exports = {
     parm1: 'value1'
   },
   Customers: {
-    dbHost:'base',
-    dbName:'from_default_js',
+    dbHost: 'base',
+    dbName: 'from_default_js',
     dbPort: 'this_is_overridden',
     get dbString() {
       return '' + this.dbName + ':' + this.dbPort;

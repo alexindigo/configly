@@ -1,0 +1,9 @@
+{
+  // Comment to test comment ignoring
+
+  "fields":
+  {
+    "field_3": "3 from json5",
+    "field_4": "4 from json5"
+  }
+}

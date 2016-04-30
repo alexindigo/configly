@@ -25,6 +25,6 @@
     "a": "",
     "b": "1"
   },
-  "ContainsQuote": "\"this has a quote\"",
+  "ContainsQuote": "\"this has quotes\"",
   "MoreComplexQuote": "<a href=\"http://localhost:3000/offers/reply?id=${{system.contact.value}}\">Test String</a>"
 }
