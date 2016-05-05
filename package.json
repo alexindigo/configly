@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "compare-property": "^2.0.0",
-    "deeply": "^2.0.0",
+    "deeply": "^2.0.1",
     "strip-bom": "^2.0.0"
   },
   "devDependencies": {

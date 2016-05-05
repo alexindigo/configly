@@ -1,18 +1,15 @@
-var Module        = require('module')
-  , path          = require('path')
+var path          = require('path')
   , fs            = require('fs')
   , os            = require('os')
   , merge         = require('deeply')
-  , cloneFunction = require('deeply/lib/clone_function.js')
+  , cloneFunction = require('deeply/lib/clone_function')
   , stripBOM      = require('strip-bom')
-  // local files
+  // sub-modules
   , compare       = require('./compare.js')
+  , parsers       = require('./parsers.js')
+  // library files
   , envVars       = require('./lib/env_vars.js')
-  , notEmpty      = require('./lib/not_empty.js')
-  , parseTokens   = require('./lib/parse_tokens.js')
-  // static
-  , hostname      = process.env['HOST'] || process.env['HOSTNAME'] || os.hostname() || ''
-  , host          = hostname.split('.')[0]
+  , getFiles      = require('./lib/get_files.js')
   ;
 
 // singleton cache object
@@ -27,18 +24,19 @@ configly.compareExtensions = compare.ascendingIgnoreCase;
 configly.arrayMerge        = merge.adapters.array;
 
 // "private" methods
-configly._getFiles        = _getFiles;
+configly.getFiles        = getFiles;
+
 configly._loadFiles       = _loadFiles;
 configly._copyProps       = _copyProps;
 configly._applyProps      = _applyProps;
 configly._applyHooks      = _applyHooks;
 configly._resolveDir      = _resolveDir;
 configly._resolveExts     = _resolveExts;
-configly._resolveFiles    = _resolveFiles;
+configly._getFilenames    = _getFilenames;
+configly._getHostname     = _getHostname;
 configly._getCacheKey     = _getCacheKey;
 configly._loadContent     = _loadContent;
 configly._mergeLayers     = _mergeLayers;
-configly._addWithSuffixes = _addWithSuffixes;
 
 // defaults
 configly.defaults = {
@@ -50,22 +48,7 @@ configly.defaults = {
 // filename chunk separator
 configly.separator = '-';
 
-// file base names
-configly.files = [
-  'default',
-  '', // allow suffixes as a basename (e.g. `environment`)
-  host,
-  hostname,
-  'local',
-  configly.defaults.customEnvVars,
-  'runtime'
-];
-
-// by default use just `js` and `json` parsers
-configly.parsers = {
-  js  : jsCompile,
-  json: JSON.parse
-};
+configly.parsers = parsers;
 
 // post-processing hooks
 // matched by the filename prefix
@@ -130,6 +113,10 @@ function createNew(options)
   // mind baked-in context of the copies
   this._applyProps(copy, options);
 
+  // get fresh list of filenames
+  // if needed
+  copy.files = copy.files || copy._getFilenames();
+
   // expose public methods on the outside
   // mind baked in context of the copies
   copy._copyProps(instance);
@@ -164,7 +151,7 @@ function load(directory, context)
   cacheKey = context._getCacheKey(directory, context);
 
   // get config files names suitable for the situation
-  files = context._getFiles(process.env);
+  files = context.getFiles(process.env);
 
   // load all available files
   layers = context._loadFiles(directory, files);
@@ -174,35 +161,6 @@ function load(directory, context)
 
   // return immutable copy
   return merge(this._cache[cacheKey]);
-}
-
-/**
- * Creates list of files to load configuration from
- * derived from the passed environment-like object
- *
- * @param   {object} env - environment-like object (e.g. `process.env`)
- * @returns {array} - ordered list of config files to load
- */
-function _getFiles(env)
-{
-  var files       = []
-    , environment = env['NODE_ENV'] || this.defaults.environment
-    , appInstance = env['NODE_APP_INSTANCE']
-    ;
-
-  // generate config files variations
-  this.files.forEach(function(baseName)
-  {
-    // check for variables
-    // keep baseName if no variables found
-    baseName = parseTokens(baseName, env) || baseName;
-
-    // add base name with available suffixes
-    this._addWithSuffixes(files, baseName, appInstance);
-    this._addWithSuffixes(files, baseName, environment, appInstance);
-  }.bind(this));
-
-  return files;
 }
 
 /**
@@ -329,50 +287,6 @@ function _mergeLayers(layers)
 }
 
 /**
- * Adds new element to the list,
- * adds provided suffixes iteratively
- * adding them to the baseName (if not empty)
- * Also checks for duplicates
- *
- * @param {array} list - array to add element to
- * @param {string} baseName - element to compare against, affects rest of the arguments
- * @param {...string} [suffix] - additional suffixes to use with the `baseName`
- */
-function _addWithSuffixes(list, baseName)
-{
-  var suffixes = Array.prototype.slice.call(arguments, 2);
-
-  // don't push empty baseName by itself
-  notEmpty(baseName) && pushUniquely(list, baseName);
-
-  suffixes.forEach(function(suffix)
-  {
-    // filter out empty suffixes
-    // and extend baseName
-    if (notEmpty(suffix))
-    {
-      baseName += (baseName ? this.separator : '') + suffix;
-      pushUniquely(list, baseName);
-    }
-  }.bind(this));
-}
-
-/**
- * Pushes element into the array,
- * only if such element is not there yet
- *
- * @param   {array} list - array to add element into
- * @param   {mixed} element - element to add
- */
-function pushUniquely(list, element)
-{
-  if (list.indexOf(element) == -1)
-  {
-    list.push(element);
-  }
-}
-
-/**
  * Applies properties from the source function onto target one
  *
  * @param   {function} target - function to enrich
@@ -385,7 +299,8 @@ function _applyProps(target, options)
 
   Object.keys(this).forEach(function(key)
   {
-    target[key] = merge(this[key], options[key]);
+    // do not merge `undefined` into existing value
+    target[key] = options.hasOwnProperty(key) ? merge(this[key], options[key]) : merge(this[key]);
 
     // special treatment for parsers
     // remove invalid parsers from the list
@@ -433,17 +348,6 @@ function _resolveDir(dir)
 }
 
 /**
- * Resolves look up files into a string
- * of sorted filenames
- *
- * @returns {string} - possible filenames (e.g. `[default, development, custom-environment-variables]`)
- */
-function _resolveFiles()
-{
-  return this._getFiles(process.env, this.files);
-}
-
-/**
  * Resolves parsers object into a string
  * of sorted extensions
  *
@@ -465,28 +369,40 @@ function _getCacheKey(directory)
 {
   return this._resolveDir(directory)
     + ':'
-    + this._resolveFiles().join(',')
+    + this.getFiles(process.env).join(',')
     + ':'
     + this._resolveExts().join(',')
     ;
 }
 
 /**
- * Compiles js content in the manner it's done
- * in the node itself
+ * Detects hostname based on the environment
  *
- * @param   {string} content - file's content
- * @param   {string} file - full path of the file
- * @returns {mixed} - result javascript object
+ * @returns {string} - hostname or empty string
  */
-function jsCompile(content, file)
+function _getHostname()
 {
-  // make it as a child of this module
-  // Would be nice to actually make it transparent
-  // and pretend it to be child of the caller module
-  // but there is no obvious way, yet
-  var jsMod = new Module(file, module);
-  jsMod._compile(content, file);
-  // return just exported object
-  return jsMod.exports;
+  return process.env['HOST'] || process.env['HOSTNAME'] || os.hostname() || '';
+}
+
+/**
+ * Creates list of filenames to search with
+ *
+ * @returns {array} - list of the filenames
+ */
+function _getFilenames()
+{
+  var hostname = this._getHostname()
+    , host     = hostname.split('.')[0]
+    ;
+
+  return [
+    'default',
+    '', // allow suffixes as a basename (e.g. `environment`)
+    host,
+    hostname,
+    'local',
+    this.defaults.customEnvVars,
+    'runtime'
+  ];
 }

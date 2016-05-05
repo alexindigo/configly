@@ -6,11 +6,6 @@ var config    = require('../');
 var compare   = require('../compare');
 var configDir = path.join(__dirname, 'fixtures/config/' + testName);
 
-// custom lookup file
-// inject one before `local` basename
-// modify properties in place (be careful in production code)
-config.files.splice(config.files.indexOf('local'), 0, 'test-custom');
-
 // custom parsers
 
 // short list
@@ -61,6 +56,13 @@ var parsersLongList = merge(parsersShortList, {
 test('plugins', function(t)
 {
   t.plan(6);
+
+  var filenames = config.files.concat();
+
+  // custom lookup file
+  // inject one before `local` basename
+  filenames.splice(filenames.indexOf('local'), 0, 'test-custom');
+  config = config.new({files: filenames});
 
   var configObj
       // and using new copy
