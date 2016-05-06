@@ -1,6 +1,6 @@
 {
   "name": "configly",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "A developer-friendly lightweight replacement for the 'config' module that works with custom config directory and pluggable parsers",
   "main": "index.js",
   "scripts": {

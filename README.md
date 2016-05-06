@@ -146,7 +146,6 @@ It is possible to load files from more than one config directory within one appl
 
 ```javascript
 var path     = require('path');
-var ini      = require('ini');
 var configly = require('configly');
 
 // "inline"
@@ -232,7 +231,7 @@ module.exports = configly.new({
 });
 ```
 
-### Migration From `config`
+### Migration from `config`
 
 To fully replicate `config`'s behavior and provide easy way to include static customized config
 in your app files, without resorting to `require('../../../config')`, you can create virtual node module,
@@ -301,6 +300,14 @@ making it's output available for every file of your app, via `var config = requi
 
 This way migration of your app from `config` module to `configly` will be limited to a few extra lines of code,
 while providing more functionality and better separation of concerns out of the box.
+
+`app/lib/file.js`
+
+```javascript
+var config = require('config');
+
+console.log('value', config.my.data.from.etc.consul.myApp.json);
+```
 
 ### More Examples
 
