@@ -8,6 +8,8 @@ A developer-friendly lightweight replacement for the `config` module that works 
 [![Coverage Status](https://img.shields.io/coveralls/alexindigo/configly/master.svg?label=code+coverage&style=flat)](https://coveralls.io/github/alexindigo/configly?branch=master)
 [![Dependency Status](https://img.shields.io/david/alexindigo/configly.svg?style=flat)](https://david-dm.org/alexindigo/configly)
 
+[![bitHound Overall Score](https://www.bithound.io/github/alexindigo/configly/badges/score.svg)](https://www.bithound.io/github/alexindigo/configly)
+
 *Notice of change of ownership: Starting version 3.0.0 this package has changed it's owner and goals. The old version (2.0.3) is still available on npm via `npm install configly@2.0.3` and on [github.com/ksmithut/configly](https://github.com/ksmithut/configly). Thank you.*
 
 ## Install
