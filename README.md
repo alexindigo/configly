@@ -55,24 +55,51 @@ var json5      = require('json5');
 // assemble new parsers list
 // order doesn't matter since they
 // will be alphabetically sorted
-config.PARSERS = {
-  ini       : ini.parse,
-  // have it as a wrapper to prevent extra arguments leaking
-  cson      : function(str) { return cson.parse(str); },
-  yml       : function(str) { return yaml.safeLoad(str); },
-  // same options as used within `config` module
-  properties: function(str) { return properties.parse(str, {namespaces: true, variables: true, sections: true}); },
-  // use json5 instead of `JSON.parse`
-  json      : json5.parse
-  // keep the original one
-  js        : config.PARSERS.js,
-};
 
-var configObj = config();
+var configObj = config({
+  parsers: {
+    ini       : ini.parse,
+    // have it as a wrapper to prevent extra arguments leaking
+    cson      : function(str) { return cson.parse(str); },
+    yml       : function(str) { return yaml.safeLoad(str); },
+    // same options as used within `config` module
+    properties: function(str) { return properties.parse(str, {namespaces: true, variables: true, sections: true}); },
+    // use json5 instead of `JSON.parse`
+    json      : json5.parse,
+    // keep the original one
+    js        : config.parsers.js
+  }
+});
 ```
 
-Since `configly` is a singleton, this setup could be done in your index file,
-and the rest of the files would use it the same way as in the "Basic" example.
+Or create new instance with new defaults
+
+```javascript
+
+var configNew = config.new({
+  parsers: {
+    ini       : ini.parse,
+    // have it as a wrapper to prevent extra arguments leaking
+    cson      : function(str) { return cson.parse(str); },
+    yml       : function(str) { return yaml.safeLoad(str); },
+    // same options as used within `config` module
+    properties: function(str) { return properties.parse(str, {namespaces: true, variables: true, sections: true}); },
+    // use json5 instead of `JSON.parse`
+    json      : json5.parse,
+    // keep the original one
+    js        : config.parsers.js
+  }
+});
+
+// use it as usual
+var configObj = configNew();
+
+```
+
+You can export newly created instance and reuse it all over your app,
+it won't be affected by other instances of the `configly` even if it
+used in dependencies of your app, or you module is part of the bigger app,
+that uses `configly`.
 
 ### Custom Config Directory
 
@@ -97,14 +124,18 @@ and invoke `configly` without custom arguments
 from within other files.
 
 ```javascript
-// index.js
+// config.js
 var path     = require('path');
 var configly = require('configly');
 
-configly.DEFAULTS.directory = path.join(__dirname, 'etc');
+module.exports = configly.new({
+  defaults: {
+    directory: path.join(__dirname, 'etc')
+  }
+});
 
 // app.js
-var config = require('configly')();
+var config = require('./config')();
 ```
 
 ### Additional Config Directories
@@ -116,18 +147,158 @@ var path     = require('path');
 var ini      = require('ini');
 var configly = require('configly');
 
-var appConfig   = configly(path.join(__dirname, 'app-config'));
-// for example you have .ini config files there
-var rulesConfig = configly(path.join(__dirname, 'rules-config'), {ini: ini.parse});
+// "inline"
+var oneConfig = configly([
+  path.join(__dirname, 'app-config'),
+  path.join(__dirname, 'rules-config')
+]);
 ```
 
-If there is a need to merge standalone config objects into one,
-you can use `configly.merge` method manually,
-in the order that suites your specific use case.
+Or creating new default
 
 ```javascript
-var oneConfig = configly.merge(appConfig, rulesConfig);
+module.exports = configly.new({
+  defaults: {
+    directory: [
+      path.join(__dirname, 'app-config'),
+      path.join(__dirname, 'rules-config')
+    ]
+  }
+});
 ```
+
+### Custom Files
+
+Also `configly` can load config data from custom files (along with the [default list](lib/create_new.js#L105)),
+handling them the same way – search for supported extensions and within specified directory(-ies).
+
+```javascript
+var config = configly({
+  files: configly.files.concat(['custom_file_A', 'custom_file_B'])
+});
+```
+
+Following code will completely replace list of filenames.
+
+```javascript
+var config = configly('/etc', {
+  files: [
+    'totally',
+    'custom',
+    'list',
+    'of',
+    'files'
+  ]
+});
+```
+
+For use cases where you need to load config files within the app,
+but augment it with server/environment specific config
+you can add absolute path filename to the files list.
+
+```javascript
+var config = configly(path.join(__dirname, 'config'), {
+  // `configly` will search for `/etc/consul/env.js`, `/etc/consul/env.json`, etc
+  // after loading default files from local `config` folder
+  files: configly.files.concat('/etc/consul/env')
+});
+```
+
+For bigger apps / more complex configs, combination of multiple directories
+and custom files would provide needed functionality.
+
+```javascript
+var path     = require('path')
+  , configly = require('configly')
+  , package  = require('./package.json')
+  ;
+
+module.exports = configly.new({
+  defaults: {
+    directory: [
+      // will search local config directory
+      path.join(__dirname, 'config'),
+      // and augment with same files
+      // from environment specific folder
+      '/etc/consul'
+    ]
+  },
+  // also will try to load config files matching current app name
+  // e.g. 'my-app.js', `my-app.json`, `my-app-production.js`, `my-app-production.json`,
+  // from both local config folder and `/etc/consul`
+  files: configly.files.concat(package.name)
+});
+```
+
+### Migration From `config`
+
+To fully replicate `config`'s behavior and provide easy way to include static customized config
+in your app files, without resorting to `require('../../../config')`, you can create virtual node module,
+based on the custom config file within your app.
+
+#### Step 1. Create config file that exports static config object (with your custom rules)
+
+`config/config.js`
+
+```javascript
+var path     = require('path')
+  , configly = require('configly')
+  , ini      = require('ini')
+  , yaml     = require('js-yaml')
+  ;
+
+// run configly once with inlined modifiers
+// and have it as node-cached module
+module.exports = configly({
+  defaults: {
+    directory: [
+      // will search local config directory
+      './etc',
+      // and augment with same files
+      // from environment specific folder
+      '/etc/consul'
+    ]
+  },
+  // also will try to load config files matching current app name
+  // e.g. `my-app.ini`, 'my-app.js', `my-app.json`, `my-app.yml`,
+  // `my-app-production.ini`, `my-app-production.js`, `my-app-production.json`, `my-app-production.yml`,
+  // from both local config folder and `/etc/consul`
+  files: configly.files.concat('my-app'),
+
+  // throw in custom parsers as well
+  parsers: {
+    ini : ini.parse,
+    // have it as a wrapper to prevent extra arguments leaking
+    yml : function(str) { return yaml.safeLoad(str); }
+  }
+});
+```
+
+#### Step 2. Add `package.json` for your virtual node module
+
+`config/package.json`
+
+```json
+{
+  "name": "config",
+  "version": "0.0.0",
+  "main": "config.js"
+}
+```
+
+#### Step 3. Add virtual node module to your app's `package.json`
+
+```json
+  "dependencies": {
+    "config": "./config"
+  },
+```
+
+Now npm will copy `./config/` files into `node_modules` and execute `./config/config.js` on first require,
+making it's output available for every file of your app, via `var config = require('config')`.
+
+This way migration of your app from `config` module to `configly` will be limited to a few extra lines of code,
+while providing more functionality and better separation of concerns out of the box.
 
 ### More Examples
 
