@@ -1,0 +1,9 @@
+{
+  "MyModule": {
+    "host": "my-module-host"
+  },
+  "AnotherModule": {
+    "VALUE": "VALUE",
+    "path": "three:four"
+  }
+}

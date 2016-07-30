@@ -1,0 +1,10 @@
+{
+  "MyModule": {
+    "host": "NONEXISTENT",
+    "path": "${VAL1}:${VAL2}"
+  },
+  "AnotherModule": {
+    "VALUE": "VALUE",
+    "path": "${VAL3}:${VAL4}"
+  }
+}
