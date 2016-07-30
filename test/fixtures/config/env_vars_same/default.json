@@ -1,0 +1,8 @@
+{
+  "MyModule": {
+    "host": "my-module-host"
+  },
+  "AnotherModule": {
+    "VALUE": "should-not-see-me"
+  }
+}
