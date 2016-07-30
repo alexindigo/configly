@@ -309,6 +309,53 @@ var config = require('config');
 console.log('value', config.my.data.from.etc.consul.myApp.json);
 ```
 
+### Base for Custom Module
+
+And similar to the method described above, it could serve as a handy toolkit for your own config module,
+below you can see simple example of the custom config module that allows for flexible extension on per project basis
+while keeping standard approach within your organization.
+
+```javascript
+var path      = require('path')
+  , configly  = require('configly')
+    // get application's name for per application custom config file,
+    // useful for having per environment specific config files
+    // separate from code base of the application
+  , appName   = process.env['NODE_MY_ORG_CONFIG_APPNAME'] || require(path.resolve('./package.json')).name
+    // by default, it will search local (CWD) `./config` directory
+    // augmented with same files from environment specific folder `/etc/consul`,
+    // and could overridden from outside of the app, for cases when app/module itself
+    // being used as the base for another service, or in test/integration environments
+  , directory = process.env['NODE_MY_ORG_CONFIG_PATH'] || './config:/etc/consul'
+    // use standard path separator `:`
+  , separator = ':'
+  ;
+
+// run configly once with inlined modifiers
+// and have it as node-cached module
+module.exports = configly({
+  defaults: {
+    directory: directory.split(separator)
+  },
+  // also will try to load config files matching current app name
+  // e.g. 'my-app.js', `my-app.json`,
+  // `my-app-production.js`, `my-app-production.json`,
+  // from both local `config` folder and from `/etc/consul`.
+  // Also `appName` could be composite value, like:
+  // `my_app:my_group:my_org` for more flexibility
+  files: configly.files.concat(appName.split(separator))
+});
+```
+
+Above code could be published on npm (internal or public), as your organization specific config module `@myorg/config`,
+and used within all your organization's projects:
+
+```javascript
+var config = require('@myorg/config');
+
+console.log(config.env.specific.value);
+```
+
 ### More Examples
 
 For more examples check out [test directory](test/).
