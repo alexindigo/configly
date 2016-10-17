@@ -1,0 +1,29 @@
+{
+  "MyModule": {
+    "bottom": "NONEXISTENT_FILE",
+    "and": {
+      "here": {
+        "some": {
+          "nested": {
+            "structure": "custom_file"
+          }
+        }
+      }
+    }
+  },
+  "AnotherModule": {
+    "yes": {
+      "it": {
+        "should": {
+          "be": {
+            "filename": {
+              "no": {
+                "extension": "../include_files/another_file"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

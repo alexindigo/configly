@@ -23,7 +23,7 @@ test('no hostname', function(t)
   os.hostname.returns(null);
   // reset list of files to search for
   config = config.new({files: null});
-  t.deepEqual(config.files, ['default', '', '', '', 'local', 'custom-environment-variables', 'runtime']);
+  t.deepEqual(config.files, ['default', '', '', '', 'local', 'custom-include-files', 'custom-environment-variables', 'runtime'], 'should be default list of files');
 
   configObj = config(configDir);
   t.deepEqual(configObj, expected, 'expects to get proper config object without hostname');

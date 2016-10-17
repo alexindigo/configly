@@ -22,9 +22,9 @@ test('default', function(t)
   process.env['VARPART2']    = 'COMBINED VAR 2/2';
 
   configObj = newConfig();
-  t.deepEqual(configObj, expected, 'expects to get proper config object from the default directory');
+  t.deepEqual(configObj, expected, 'expects to get proper config object from `configly`, with the default directory');
 
   // same works for `config.load` function
   configObj = newConfig.load();
-  t.deepEqual(configObj, expected, 'expects to get proper config object from the default directory');
+  t.deepEqual(configObj, expected, 'expects to get same config object from `.load`, with the default directory');
 });

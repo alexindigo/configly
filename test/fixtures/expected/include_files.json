@@ -1,0 +1,51 @@
+{
+  "MyModule": {
+    "top": "my-module-top",
+    "bottom": "my-module-bottom",
+    "and": {
+      "here": {
+        "some": {
+          "nested": {
+            "structure": {
+              "some": {
+                "structure": {
+                  "inside": "file"
+                }
+              },
+              "more": {
+                "keys": true
+              },
+              "regular": {
+                "json": "file",
+                "in": {
+                  "other": "words"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "AnotherModule": {
+    "yes": {
+      "it": {
+        "should": {
+          "be": {
+            "filename": {
+              "no": {
+                "extension": {
+                  "js": "file",
+                  "works": {
+                    "as": "well"
+                  },
+                  "varKey": 25
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

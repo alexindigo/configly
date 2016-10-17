@@ -1,0 +1,34 @@
+{
+  "MyModule": {
+    "bottom": "NONEXISTENT_FILE",
+    "and": {
+      "here": {
+        "some": {
+          "nested": {
+            "structure": "custom_file"
+          }
+        }
+      }
+    }
+  },
+  "Arrays Not Supported": [
+    "file_1",
+    "file_2",
+    "file_3"
+  ],
+  "AnotherModule": {
+    "yes": {
+      "it": {
+        "should": {
+          "be": {
+            "filename": {
+              "no": {
+                "extension": "another_file"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "some": {
+    "structure": {
+      "inside": "file"
+    }
+  },
+  "more": {
+    "keys": true
+  },
+  "regular": {
+    "json": "file",
+    "in": {
+      "other": "words"
+    }
+  }
+}

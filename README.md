@@ -368,7 +368,7 @@ Main differences between `configly` and `config`:
 
 - Configly provides deterministic (and controllable) order of the config files it loads from.
 - Configly provides deterministic (and controllable) order of the file extensions it loads from.
-- Configly provides post-load hooks for config files, (e.g. `custom-environment-variables` works via this mechanism).
+- Configly provides post-load hooks for config files, (e.g. `custom-environment-variables` and `custom-include-files` work via this mechanism).
 - Configly provides ability to combine environment variables within one entry (e.g. `"endpoint": "${REMOTE_HOST}:${REMOTE_PORT}"`).
 - Configly provides access to the underlying functions and defaults, allowing to utilize parts of the functionality for greater flexibility.
 

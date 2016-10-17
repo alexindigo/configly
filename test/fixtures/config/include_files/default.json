@@ -1,0 +1,11 @@
+{
+  "MyModule": {
+    "top": "my-module-top",
+    "bottom": "my-module-bottom"
+  },
+  "AnotherModule": {
+    "yes": {
+      "it": "should-not-see-me"
+    }
+  }
+}
