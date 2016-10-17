@@ -33,7 +33,7 @@ test('custom hooks', function(t)
             node[key] = value + 3;
           });
 
-          // expected to return update object
+          // expected to return updated object
           return config;
         },
 
@@ -43,11 +43,11 @@ test('custom hooks', function(t)
         {
           iterate(config, function(value, key, node)
           {
-            // increments each value by 4
-            node[key] = value + 4;
+            // multiplies each value by 2
+            node[key] = value * 2;
           });
 
-          // expected to return update object
+          // expected to return updated object
           return config;
         },
 
@@ -61,7 +61,7 @@ test('custom hooks', function(t)
             node[key] = value + 5;
           });
 
-          // expected to return update object
+          // expected to return updated object
           return config;
         }
 

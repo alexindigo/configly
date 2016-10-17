@@ -3,6 +3,7 @@
 A developer-friendly lightweight replacement for the `config` module that works with custom config directory and pluggable parsers.
 
 [![Linux Build](https://img.shields.io/travis/alexindigo/configly/master.svg?label=linux:0.10-6.x&style=flat)](https://travis-ci.org/alexindigo/configly)
+[![MacOS Build](https://img.shields.io/travis/alexindigo/configly/master.svg?label=macos:0.10-6.x&style=flat)](https://travis-ci.org/alexindigo/configly)
 [![Windows Build](https://img.shields.io/appveyor/ci/alexindigo/configly/master.svg?label=windows:0.10-6.x&style=flat)](https://ci.appveyor.com/project/alexindigo/configly)
 
 [![Coverage Status](https://img.shields.io/coveralls/alexindigo/configly/master.svg?label=code+coverage&style=flat)](https://coveralls.io/github/alexindigo/configly?branch=master)
@@ -233,6 +234,99 @@ module.exports = configly.new({
 });
 ```
 
+### Custom Environment Variables
+
+It allows to combine environment variables within a single entry (e.g. `"endpoint": "${REMOTE_HOST}:${REMOTE_PORT}"`), which helps to keep application config consumption simple and to the point, and gives greater control over different environments, like using Docker environment variables for linked containers.
+
+`custom-environment-variables.json`:
+
+```json
+{
+  "Customers":
+  {
+    "dbPassword"  :"ENV_VAR_NAME_AS_STRING",
+    "dbPassword2" :"${ENV_VAR_NAME_VARIABLE}"
+  },
+  "CombinedWithText" : "${VARPART1}:${VARPART2}",
+  "BothVarsEmptyWillBeSkippedCompletely" : "${NOEXISTING} + another ${EMPTY} var"
+}
+```
+
+### Custom Include Files
+
+For better integration with other configuration systems and third-party tools that generate configs, `configly` can "mount" custom config files into specified entries, for example if you need to pull webpack manifest files into app's config).
+
+`custom-include-files.json`:
+
+```json
+{
+  "MyModule": {
+    "WillBeIgnored": "NONEXISTENT_FILE",
+    "and": {
+      "here": {
+        "some": {
+          "nested": {
+            "structure": "custom_file"
+          }
+        }
+      }
+    }
+  },
+  "AnotherModule": {
+    "yes": {
+      "it": {
+        "should": {
+          "be": {
+            "filename": {
+              "no": {
+                "extension": "../include_files/another_file"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+In the above example it will check for following custom files, (given `NODE_ENV` equals `production`):
+
+- `custom_file.js`
+- `custom_file.json`
+- `custom_file-production.js`
+- `custom_file-production.json`
+- `../include_files/another_file.js`
+- `../include_files/another_file.json`
+- `../include_files/another_file-production.js`
+- `../include_files/another_file-production.json`
+
+And will attach their content to the respective branches.
+
+### Custom Hooks
+
+Developers can extend `configly`'s functionality with custom hooks for config files. For example if you need to pull in sensitive into your config and it couldn't be stored on disk among rest of the configuration data, you can add your own hooks to relace placeholders or attach extra values with data pull from the environment or from a secure storage. All hooks should be synchronous.
+
+```javascript
+var customHooks = merge(configly.hooks, {
+  // will be applied to `local`, `local-development` and other `local*` files
+  // expects `config` object of the parsed file
+  local: function(config)
+  {
+    iterate(config, function(value, key, node)
+    {
+      // increments each value by 4
+      node[key] = value + 4;
+    });
+
+    // expected to return updated object
+    return config;
+  }
+});
+
+var config = configly(configDir, {hooks: customHooks});
+```
+
 ### Migration from `config`
 
 To fully replicate `config`'s behavior and provide easy way to include static customized config
@@ -372,6 +466,7 @@ Main differences between `configly` and `config`:
 - Configly provides deterministic (and controllable) order of the file extensions it loads from.
 - Configly provides post-load hooks for config files, (e.g. `custom-environment-variables` and `custom-include-files` work via this mechanism).
 - Configly provides ability to combine environment variables within one entry (e.g. `"endpoint": "${REMOTE_HOST}:${REMOTE_PORT}"`).
+- Configly provides ability to "mount" custom config files into specified entries (useful to pull webpack manifest files into app's config).
 - Configly provides access to the underlying functions and defaults, allowing to utilize parts of the functionality for greater flexibility.
 
 ### Does Not
@@ -382,7 +477,6 @@ Main differences between `configly` and `config`:
 - Configly doesn't provide `get`, `has` methods, it always returns pure js (POJO) object.
 - Configly doesn't auto-strip comments from JSON files, use `configly.PARSERS['json'] = json5.parse;`.
 
-
 ## License
 
-Configly is licensed under the MIT license.
+Configly is released under the MIT license.
