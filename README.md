@@ -49,7 +49,9 @@ Out of the box `configly` supports only two formats (`.js` and `.json`), but dev
 var config     = require('configly');
 // more parsers
 var ini        = require('ini');
-var cson       = require('cson');
+// Note: recommended to use `cson-parser` over `cson`
+// due to https://github.com/groupon/cson-parser/issues/56
+var cson       = require('cson-parser');
 var yaml       = require('js-yaml');
 var properties = require('properties');
 var json5      = require('json5');
