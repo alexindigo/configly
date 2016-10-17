@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint index.js test/*.js",
+    "ci-lint": "is-node-modern && npm run lint || is-node-not-modern",
     "test": "nyc --reporter=lcov --reporter=text --check-coverage --lines 99 --functions 99 --branches 99 tape test/*.js | tap-spec",
     "debug": "tape test/*.js | tap-spec"
   },
