@@ -16,7 +16,7 @@ var properties = require('properties');
 var json5      = require('json5');
 
 // the rest
-var coffeeScript = require('coffee-script');
+var coffeeScript = require('coffeescript');
 var hjson        = require('hjson');
 var toml         = require('toml');
 
@@ -42,7 +42,7 @@ var parsersShortList = {
 var parsersLongList = merge(parsersShortList, {
   hjson : hjson.parse,
   toml  : toml.parse,
-  // coffee-script requires some wrapping too
+  // coffeescript requires some wrapping too
   coffee: coffeeCompile,
   // put json5 back to it's specific extension
   json5 : json5.parse,
@@ -65,7 +65,7 @@ test('plugins', function(t)
   config = config.new({files: filenames});
 
   var configObj
-      // and using new copy
+    // and using new copy
     , configWithShortList    = config.new({parsers: parsersShortList})
     , configWithLongList     = config.new({parsers: parsersLongList})
     , configWithLongListDesc = config.new({parsers: parsersLongList, compareExtensions: compare.descendingIgnoreCase})
@@ -107,7 +107,7 @@ test('plugins', function(t)
 });
 
 /**
- * Compiles coffee-script content
+ * Compiles coffeescript content
  *
  * @param   {string} content - file's content
  * @param   {string} file - full path of the file
@@ -115,7 +115,7 @@ test('plugins', function(t)
  */
 function coffeeCompile(content, file)
 {
-  // first transpile coffee-script into javascript
+  // first transpile coffeescript into javascript
   var properJs = coffeeScript.compile(content, {
     filename : file,
     sourceMap: false,
