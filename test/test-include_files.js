@@ -9,8 +9,6 @@ test('custom include files', function(t)
 {
   t.plan(1);
 
-  var configObj;
-
-  configObj = config(configDir);
+  var configObj = config({ directories: configDir });
   t.deepLooseEqual(configObj, expected, 'expects to get right config object');
 });

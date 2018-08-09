@@ -25,7 +25,7 @@ test('no hostname', function(t)
   config = config.new({files: null});
   t.deepEqual(config.files, ['default', '', '', '', 'local', 'custom-include-files', 'custom-environment-variables', 'runtime'], 'should be default list of files');
 
-  configObj = config(configDir);
+  configObj = config({ directories: configDir });
   t.deepEqual(configObj, expected, 'expects to get proper config object without hostname');
 
   // restore hacks

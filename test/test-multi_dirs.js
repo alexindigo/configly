@@ -8,11 +8,11 @@ test('multi dirs', function(t)
   var configObj;
 
   // get stuff from multiple directories on-the-fly
-  configObj = config([
+  configObj = config({ directories: [
     './test/fixtures/config/custom',
     './test/fixtures/config/custom_2',
     './test/fixtures/config/custom_3'
-  ]);
+  ]});
 
   t.deepEqual(configObj, {
     fields: {

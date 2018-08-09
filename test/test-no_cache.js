@@ -37,7 +37,7 @@ test('no cache', function(t)
   t.equal(fs.readFileSync.callCount, 8, 'expects to read each file again');
 
   // and it should be in the cache already
-  configObj = config(configDir);
+  configObj = config({ directories: configDir });
   t.deepEqual(configObj, expected, 'expects to get proper config object, again');
   t.equal(fs.readFileSync.callCount, 8, 'expects not to read files again');
 

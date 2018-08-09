@@ -16,6 +16,6 @@ test('custom environment variables with value same as the key', function(t)
   process.env['VAL3']  = 'three';
   process.env['VAL4']  = 'four';
 
-  configObj = config(configDir);
+  configObj = config({ directories: configDir });
   t.deepLooseEqual(configObj, expected, 'expects to get right config object');
 });

@@ -57,7 +57,9 @@ test('custom files', function(t)
 
   // with bake-in custom file and different search directory
 
-  configObj = newConfig('./test/fixtures/config/custom_3');
+  configObj = newConfig({
+    directories: './test/fixtures/config/custom_3'
+  });
   t.deepEqual(configObj, {
     'fields': {
       'field_4': '4 from secondary/custom.json',

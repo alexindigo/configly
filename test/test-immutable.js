@@ -10,8 +10,8 @@ test('immutable', function(t)
 
   var configObjA, configObjB;
 
-  configObjA = config(configDir);
-  configObjB = config(configDir);
+  configObjA = config({ directories: configDir });
+  configObjB = config({ directories: configDir });
 
   // mutate
   configObjA.Customers.dbName = 'mutated';

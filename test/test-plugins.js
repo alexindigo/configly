@@ -81,27 +81,27 @@ test('plugins', function(t)
   process.env['VARPART2']          = 'COMBINED VAR 2/2';
 
   // get short list first, and keep original
-  configObj = config(configDir, {parsers: parsersShortList});
+  configObj = config({ directories: configDir, parsers: parsersShortList});
   t.deepEqual(configObj, expectedShort, 'expects to get proper config object for the short list');
 
-  configObj = configWithShortList(configDir);
+  configObj = configWithShortList({ directories: configDir });
   t.deepEqual(configObj, expectedShort, 'expects to get proper config object for copy of the short list');
 
   // get all the files
-  configObj = config(configDir, {parsers: parsersLongList});
+  configObj = config({ directories: configDir, parsers: parsersLongList});
   t.deepEqual(configObj, expectedAll, 'expects to get proper config object for the full list');
 
-  configObj = configWithLongList(configDir);
+  configObj = configWithLongList({ directories: configDir });
   t.deepEqual(configObj, expectedAll, 'expects to get proper config object for copy of the full list');
 
   // get all the files with extensions in reversed order
   // replace default compare function with opposite one,
   // since extension yield different order,
   // it would pass the cache and re-read files one more time
-  configObj = config(configDir, {parsers: parsersLongList, compareExtensions: compare.descendingIgnoreCase});
+  configObj = config({ directories: configDir, parsers: parsersLongList, compareExtensions: compare.descendingIgnoreCase});
   t.deepEqual(configObj, expectedReversed, 'expects to get proper config object for the full list and reversed extensions');
 
-  configObj = configWithLongListDesc(configDir);
+  configObj = configWithLongListDesc({ directories: configDir });
   t.deepEqual(configObj, expectedReversed, 'expects to get proper config object for copy of the full list and reversed extensions');
 
 });

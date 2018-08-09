@@ -70,7 +70,7 @@ test('custom hooks', function(t)
 
   process.env['NODE_ENV']  = 'development';
 
-  configObj = configly(configDir, {hooks: customHooks});
+  configObj = configly({directories: configDir, hooks: customHooks});
   t.deepLooseEqual(configObj, expected, 'expects to get proper config object');
 });
 

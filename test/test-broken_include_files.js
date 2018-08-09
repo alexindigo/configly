@@ -10,7 +10,7 @@ test('broken custom include files', function(t)
 
   t.throws(function()
   {
-    config(configDir);
+    config({ directories: configDir });
   },
   {message: 'Illegal key type for custom-include-files at Arrays Not Supported: [object Array]'},
   'expects to throw on array element within custom-include-files file');

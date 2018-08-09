@@ -30,7 +30,7 @@ test('array merge', function(t)
     }
   });
 
-  configObj = customConfig(configDir);
+  configObj = customConfig({ directories: configDir });
 
   t.equal(customConfig.defaults.directories, defaultDir, 'expects to have new default directories');
   t.deepLooseEqual(configObj, expected, 'expects to get config object with merged arrays');

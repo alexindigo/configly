@@ -24,13 +24,13 @@ test('cache', function(t)
 
   sinon.spy(fs, 'readFileSync');
 
-  configObj = config(configDir);
+  configObj = config({ directories: configDir });
   t.deepEqual(configObj, expected, 'expects to get proper config object');
   t.equal(fs.readFileSync.callCount, 4, 'expects to read each file once');
 
   // oops, I did it again
 
-  configObj = config(configDir);
+  configObj = config({ directories: configDir });
   t.deepEqual(configObj, expected, 'expects to get proper config object, again');
   t.equal(fs.readFileSync.callCount, 4, 'expects to read each file only once, still');
 

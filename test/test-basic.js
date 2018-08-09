@@ -20,6 +20,6 @@ test('basic', function(t)
   process.env['VARPART1']    = 'COMBINED VAR 1/2';
   process.env['VARPART2']    = 'COMBINED VAR 2/2';
 
-  configObj = config(configDir);
+  configObj = config({ directories: configDir });
   t.deepLooseEqual(configObj, expected, 'expects to get proper config object');
 });
