@@ -1,6 +1,6 @@
 # configly [![NPM Module](https://img.shields.io/npm/v/configly.svg?style=flat)](https://www.npmjs.com/package/configly)
 
-A developer-friendly lightweight replacement for the `config` module that works with custom config directory and pluggable parsers.
+A developer-friendly lightweight replacement for the `config` module that works with custom config directories, pluggable parsers and with many other handy features.
 
 [![Linux Build](https://img.shields.io/travis/alexindigo/configly/canary.svg?label=linux:6.x-10.x&style=flat)](https://travis-ci.org/alexindigo/configly)
 [![MacOS Build](https://img.shields.io/travis/alexindigo/configly/canary.svg?label=macos:6.x-10.x&style=flat)](https://travis-ci.org/alexindigo/configly)
@@ -140,7 +140,7 @@ var configly = require('configly');
 
 module.exports = configly.new({
   defaults: {
-    directory: path.join(__dirname, 'etc')
+    directories: path.join(__dirname, 'etc')
   }
 });
 
@@ -168,7 +168,7 @@ Or creating new default
 ```javascript
 module.exports = configly.new({
   defaults: {
-    directory: [
+    directories: [
       path.join(__dirname, 'app-config'),
       path.join(__dirname, 'rules-config')
     ]
@@ -224,7 +224,7 @@ var path     = require('path')
 
 module.exports = configly.new({
   defaults: {
-    directory: [
+    directories: [
       // will search local config directory
       path.join(__dirname, 'config'),
       // and augment with same files
@@ -353,7 +353,7 @@ var path     = require('path')
 // and have it as node-cached module
 module.exports = configly({
   defaults: {
-    directory: [
+    directories: [
       // will search local config directory
       './etc',
       // and augment with same files
@@ -427,7 +427,7 @@ var path      = require('path')
     // augmented with same files from environment specific folder `/etc/consul`,
     // and could overridden from outside of the app, for cases when app/module itself
     // being used as the base for another service, or in test/integration environments
-  , directory = process.env['NODE_MY_ORG_CONFIG_PATH'] || './config:/etc/consul'
+  , directories = process.env['NODE_MY_ORG_CONFIG_PATH'] || './config:/etc/consul'
     // use standard path separator `:`
   , separator = ':'
   ;
@@ -436,7 +436,7 @@ var path      = require('path')
 // and have it as node-cached module
 module.exports = configly({
   defaults: {
-    directory: directory.split(separator)
+    directories: directories.split(separator)
   },
   // also will try to load config files matching current app name
   // e.g. 'my-app.js', `my-app.json`,

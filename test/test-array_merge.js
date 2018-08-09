@@ -15,7 +15,7 @@ test('array merge', function(t)
   // concat arrays instead of replacing
   var customConfig = config.new({
     defaults: {
-      directory: defaultDir
+      directories: defaultDir
     },
     files: config.files.concat('my_custom_file'),
     arrayMerge: function(to, from, merge)
@@ -32,6 +32,6 @@ test('array merge', function(t)
 
   configObj = customConfig(configDir);
 
-  t.equal(customConfig.defaults.directory, defaultDir, 'expects to have new default directory');
+  t.equal(customConfig.defaults.directories, defaultDir, 'expects to have new default directories');
   t.deepLooseEqual(configObj, expected, 'expects to get config object with merged arrays');
 });

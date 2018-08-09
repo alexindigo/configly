@@ -8,8 +8,8 @@ test('custom files', function(t)
 
   var newConfig, configObj;
 
-  // update default directory for the test
-  newConfig = config.new({defaults: {directory: './test/fixtures/config/custom'}});
+  // update default directories for the test
+  newConfig = config.new({defaults: {directories: './test/fixtures/config/custom'}});
 
   // "default" with custom directory
 

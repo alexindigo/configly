@@ -1,7 +1,7 @@
 {
   "name": "configly",
   "version": "5.0.0-canary.0",
-  "description": "A developer-friendly lightweight replacement for the 'config' module that works with custom config directory and pluggable parsers",
+  "description": "A developer-friendly lightweight replacement for the 'config' module that works with custom config directories and pluggable parsers",
   "main": "index.js",
   "scripts": {
     "lint": "eslint index.js test/*.js",
@@ -29,6 +29,7 @@
     "config",
     "conf",
     "directory",
+    "directories",
     "immutable",
     "instance",
     "pluggable",

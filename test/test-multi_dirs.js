@@ -27,10 +27,10 @@ test('multi dirs', function(t)
     }
   }, 'expects to get proper config object from multiple directories on-the-fly setup');
 
-  // update default directory for the test
+  // update default directories for the test
   config = config.new({
     defaults: {
-      directory: [
+      directories: [
         './test/fixtures/config/custom',
         './test/fixtures/config/custom_2',
         './test/fixtures/config/custom_3'

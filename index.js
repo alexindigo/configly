@@ -22,15 +22,15 @@ configly.arrayMerge        = merge.adapters.array;
 
 // defaults
 configly.defaults = {
-  directory         : './config',
+  directories       : './config',
   environment       : 'development',
   customEnvVars     : 'custom-environment-variables',
   customIncludeFiles: 'custom-include-files'
 };
 
-// no specific directory set (yet)
+// no specific directories set (yet)
 // fallback to the default one
-configly.directory = null;
+configly.directories = null;
 
 // filename chunk separator
 configly.separator = '-';

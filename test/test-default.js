@@ -9,8 +9,8 @@ test('default', function(t)
 
   var configObj;
 
-  // update default directory for the test
-  var newConfig = config.new({defaults: {directory: './test/fixtures/config/default'}});
+  // update default directories for the test
+  var newConfig = config.new({defaults: {directories: './test/fixtures/config/default'}});
 
   // augment `process.env` for stable testing`
   process.env['NODE_ENV']    = 'staging';
@@ -22,9 +22,9 @@ test('default', function(t)
   process.env['VARPART2']    = 'COMBINED VAR 2/2';
 
   configObj = newConfig();
-  t.deepEqual(configObj, expected, 'expects to get proper config object from `configly`, with the default directory');
+  t.deepEqual(configObj, expected, 'expects to get proper config object from `configly`, with the default directories');
 
   // same works for `config.load` function
   configObj = newConfig.load();
-  t.deepEqual(configObj, expected, 'expects to get same config object from `.load`, with the default directory');
+  t.deepEqual(configObj, expected, 'expects to get same config object from `.load`, with the default directories');
 });
