@@ -10,7 +10,7 @@ test('malformed', function(t)
 
   t.throws(function()
   {
-    config(configDir);
+    config({ directories: configDir });
   },
   {message: 'default.json cannot be read or malformed'},
   'expects to throw on malformed config file');

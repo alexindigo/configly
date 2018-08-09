@@ -19,7 +19,7 @@ test('broken custom environment variables', function(t)
 
   t.throws(function()
   {
-    config(configDir);
+    config({ directories: configDir });
   },
   {message: 'Illegal key type for custom-environment-variables at Arrays Not Supported: [object Array]'},
   'expects to throw on array element within custom-environment-variables file');

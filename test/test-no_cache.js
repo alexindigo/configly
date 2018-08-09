@@ -25,14 +25,14 @@ test('no cache', function(t)
   sinon.spy(fs, 'readFileSync');
 
   // directly load files without checking for cache
-  configObj = config.load(configDir);
+  configObj = config.load({ directories: configDir });
   t.deepEqual(configObj, expected, 'expects to get proper config object');
   t.equal(fs.readFileSync.callCount, 4, 'expects to read each file each time');
 
   // oops, I did it again
 
   // directly load files without checking for cache
-  configObj = config.load(configDir);
+  configObj = config.load({ directories: configDir });
   t.deepEqual(configObj, expected, 'expects to get proper config object, again');
   t.equal(fs.readFileSync.callCount, 8, 'expects to read each file again');
 
