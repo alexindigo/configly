@@ -2,11 +2,11 @@
 
 A developer-friendly lightweight replacement for the `config` module that works with custom config directory and pluggable parsers.
 
-[![Linux Build](https://img.shields.io/travis/alexindigo/configly/master.svg?label=linux:6.x-10.x&style=flat)](https://travis-ci.org/alexindigo/configly)
-[![MacOS Build](https://img.shields.io/travis/alexindigo/configly/master.svg?label=macos:6.x-10.x&style=flat)](https://travis-ci.org/alexindigo/configly)
-[![Windows Build](https://img.shields.io/appveyor/ci/alexindigo/configly/master.svg?label=windows:6.x-10.x&style=flat)](https://ci.appveyor.com/project/alexindigo/configly)
+[![Linux Build](https://img.shields.io/travis/alexindigo/configly/canary.svg?label=linux:6.x-10.x&style=flat)](https://travis-ci.org/alexindigo/configly)
+[![MacOS Build](https://img.shields.io/travis/alexindigo/configly/canary.svg?label=macos:6.x-10.x&style=flat)](https://travis-ci.org/alexindigo/configly)
+[![Windows Build](https://img.shields.io/appveyor/ci/alexindigo/configly/canary.svg?label=windows:6.x-10.x&style=flat)](https://ci.appveyor.com/project/alexindigo/configly)
 
-[![Coverage Status](https://img.shields.io/coveralls/alexindigo/configly/master.svg?label=code+coverage&style=flat)](https://coveralls.io/github/alexindigo/configly?branch=master)
+[![Coverage Status](https://img.shields.io/coveralls/alexindigo/configly/canary.svg?label=code+coverage&style=flat)](https://coveralls.io/github/alexindigo/configly?branch=canary)
 [![Dependency Status](https://img.shields.io/david/alexindigo/configly.svg?style=flat)](https://david-dm.org/alexindigo/configly)
 
 *Notice of change of ownership: Starting version 3.0.0 this package has changed it's owner and goals. The old version (2.0.3) is still available on npm via `npm install configly@2.0.3` and on [github.com/ksmithut/configly](https://github.com/ksmithut/configly). Thank you.*
