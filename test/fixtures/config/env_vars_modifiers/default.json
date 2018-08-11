@@ -1,0 +1,31 @@
+{
+  "stuff": {
+    "string": "--OOPS--",
+    "string_as_string": "--OOPS--",
+
+    "number": "--OOPS--",
+    "number_as_string": "--OOPS--",
+
+    "null": "--KEEP IT DEFAULT--",
+    "null_as_string": "--KEEP IT DEFAULT AS STRING--",
+    "null_no_modifiers": "--OOPS--",
+
+    "true": "--OOPS--",
+    "true_as_string": "--OOPS--",
+
+    "false": "--OOPS--",
+    "false_as_string": "--OOPS--",
+
+    "negative": "--OOPS--",
+    "negative_as_string": "--OOPS--",
+
+    "zero": "--OOPS--",
+    "zero_as_string": "--OOPS--",
+
+    "date": "--OOPS--",
+    "date_as_string": "--OOPS--",
+
+    "without_env": "--EXPECT IT--",
+    "without_env_as_string": "--EXPECT IT AS STRING--"
+  }
+}

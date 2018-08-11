@@ -1,0 +1,31 @@
+{
+  "stuff": {
+    "string": "SOME_STRING",
+    "string_as_string": "${SOME_STRING}",
+
+    "number": "json A_NUMBER",
+    "number_as_string": "${json A_NUMBER}",
+
+    "null": "json JUST_NULL",
+    "null_as_string": "${json JUST_NULL}",
+    "null_no_modifiers": "${JUST_NULL}",
+
+    "true": "json VERY_TRUE",
+    "true_as_string": "${json VERY_TRUE}",
+
+    "false": "json PRETTY_FALSE",
+    "false_as_string": "${json PRETTY_FALSE}",
+
+    "negative": "json BELOW_ZERO",
+    "negative_as_string": "${json BELOW_ZERO}",
+
+    "zero": "json FALSY_ZERO",
+    "zero_as_string": "${json FALSY_ZERO}",
+
+    "date": "date SOMETIME_THEN",
+    "date_as_string": "${date SOMETIME_THEN}",
+
+    "without_env": "json WITHOUT_ENV",
+    "without_env_as_string": "${json WITHOUT_ENV}"
+  }
+}

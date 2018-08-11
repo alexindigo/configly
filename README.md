@@ -257,6 +257,34 @@ It allows to combine environment variables within a single entry (e.g. `"endpoin
 }
 ```
 
+#### Modifiers
+
+Since environment variables only passed as string, it creates inconvenience for handling non-string values, like boolean, falsy or complex values.
+
+Modifiers will come handy to "pre-parse" values passed from the environment,
+for example to pass `false` to your config or if some library requires casted parameters for number value.
+
+`custom-environment-variables.json`:
+
+```js
+{
+  "api":
+  {
+    "mocksEnabled"  :"json FETCH_MOCKS_ENABLED", // 'false' -> false
+    "timeout" :"json FETCH_TIMEOUT", // '1500' -> 1500
+    "cutOffDate" : "date DATE_CUTOFF", // '2018-08-08' -> new Date('2018-08-08')
+    "nullSignalSkip": "json PASSED_NULL" // 'null' -> null -> ''
+  },
+  "combinedBoolCastedToString" : "${json FETCH_MOCKS_ENABLED}", // 'false' -> false -> 'false'
+  "combinedNumberCastedToString" : "${json FETCH_TIMEOUT}", // '1500' -> 1500 -> '1500'
+  "combinedDateCastedToString" : "${date DATE_CUTOFF}", // '2018-08-08' -> new Date('2018-08-08') -> 'Tue Aug 07 2018 17:00:00 GMT-0700 (Pacific Daylight Time)'
+  "combinedNullSignalSkip": "${json PASSED_NULL}", // 'null' -> null -> '' -> ''
+  "nullNoModifierIsString": "PASSED_NULL", // 'null' -> 'null'
+  "combinedNullNoModifierIsString": "${PASSED_NULL}" // 'null' -> 'null' -> 'null'
+}
+```
+
+
 ### Custom Include Files
 
 For better integration with other configuration systems and third-party tools that generate configs, `configly` can "mount" custom config files into specified entries, for example if you need to pull webpack manifest files into app's config).

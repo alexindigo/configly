@@ -2,6 +2,7 @@ var merge        = require('deeply')
   // sub-modules
   , compare      = require('./compare.js')
   , parsers      = require('./parsers.js')
+  , modifiers    = require('./modifiers.js')
   // library files
   , configly     = require('./lib/configly.js')
   , load         = require('./lib/load.js')
@@ -36,6 +37,7 @@ configly.directories = null;
 configly.separator = '-';
 
 configly.parsers = parsers;
+configly.modifiers = modifiers;
 
 // post-processing hooks
 // matched by the filename prefix
