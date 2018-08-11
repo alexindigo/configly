@@ -1,0 +1,6 @@
+{
+  "stuff": {
+    "date": "date SOMETIME_NEVER",
+    "date_as_string": "${date SOMETIME_NEVER}"
+  }
+}
