@@ -1,0 +1,6 @@
+{
+  "stuff": {
+    "array_less": "array ARRAY_LESS",
+    "array_less_as_string": "${array ARRAY_LESS}"
+  }
+}

@@ -52,6 +52,15 @@ module.exports = {
     'boolean_zero': false,
     'boolean_zero_as_string': 'false',
     'boolean_one': true,
-    'boolean_one_as_string': 'true'
+    'boolean_one_as_string': 'true',
+
+    'bool_true': true,
+    'bool_true_as_string': 'true',
+    'bool_false': false,
+    'bool_false_as_string': 'false',
+    'bool_zero': false,
+    'bool_zero_as_string': 'false',
+    'bool_one': true,
+    'bool_one_as_string': 'true'
   }
 };

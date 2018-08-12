@@ -1,0 +1,6 @@
+{
+  "stuff": {
+    "un_boolean": "boolean UN_BOOLEAN",
+    "un_boolean_as_string": "${boolean UN_BOOLEAN}"
+  }
+}

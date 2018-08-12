@@ -1,0 +1,6 @@
+{
+  "stuff": {
+    "number_wannabe": "number ALMOST_NUMBER",
+    "number_wannabe_as_string": "${number ALMOST_NUMBER}"
+  }
+}

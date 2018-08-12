@@ -50,7 +50,15 @@
     "boolean_zero": "boolean EITHER_OR_ZERO",
     "boolean_zero_as_string": "${boolean EITHER_OR_ZERO}",
     "boolean_one": "boolean EITHER_OR_ONE",
-    "boolean_one_as_string": "${boolean EITHER_OR_ONE}"
+    "boolean_one_as_string": "${boolean EITHER_OR_ONE}",
 
+    "bool_true": "bool EITHER_OR_TRUE",
+    "bool_true_as_string": "${bool EITHER_OR_TRUE}",
+    "bool_false": "bool EITHER_OR_FALSE",
+    "bool_false_as_string": "${bool EITHER_OR_FALSE}",
+    "bool_zero": "bool EITHER_OR_ZERO",
+    "bool_zero_as_string": "${bool EITHER_OR_ZERO}",
+    "bool_one": "bool EITHER_OR_ONE",
+    "bool_one_as_string": "${bool EITHER_OR_ONE}"
   }
 }

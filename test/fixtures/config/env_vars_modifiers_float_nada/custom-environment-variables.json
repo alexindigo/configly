@@ -1,0 +1,6 @@
+{
+  "stuff": {
+    "floating_away": "float ANTI_FLOAT",
+    "floating_away_as_string": "${float ANTI_FLOAT}"
+  }
+}

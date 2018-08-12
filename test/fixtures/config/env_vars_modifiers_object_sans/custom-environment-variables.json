@@ -1,0 +1,6 @@
+{
+  "stuff": {
+    "object_sans": "object OBJECT_SANS",
+    "object_sans_as_string": "${object OBJECT_SANS}"
+  }
+}
