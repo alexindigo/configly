@@ -26,6 +26,31 @@
     "date_as_string": "${date SOMETIME_THEN}",
 
     "without_env": "json WITHOUT_ENV",
-    "without_env_as_string": "${json WITHOUT_ENV}"
+    "without_env_as_string": "${json WITHOUT_ENV}",
+
+    "number_with_int": "number KINDOF_NUMBER",
+    "number_with_int_as_string": "${number KINDOF_NUMBER}",
+
+    "int": "int KINDOF_NUMBER",
+    "int_as_string": "${int KINDOF_NUMBER}",
+
+    "number_with_float": "float HALF_A_NUMBER",
+    "number_with_float_as_string": "${float HALF_A_NUMBER}",
+
+    "array": "array ARRAY_BUNCH",
+    "array_as_string": "${array ARRAY_BUNCH}",
+
+    "object": "object OBJECT_IT",
+    "object_as_string": "${object OBJECT_IT}",
+
+    "boolean_true": "boolean EITHER_OR_TRUE",
+    "boolean_true_as_string": "${boolean EITHER_OR_TRUE}",
+    "boolean_false": "boolean EITHER_OR_FALSE",
+    "boolean_false_as_string": "${boolean EITHER_OR_FALSE}",
+    "boolean_zero": "boolean EITHER_OR_ZERO",
+    "boolean_zero_as_string": "${boolean EITHER_OR_ZERO}",
+    "boolean_one": "boolean EITHER_OR_ONE",
+    "boolean_one_as_string": "${boolean EITHER_OR_ONE}"
+
   }
 }

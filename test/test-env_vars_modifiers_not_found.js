@@ -15,6 +15,6 @@ test('environment variable with non-existent modifier', function(t)
   {
     config({ directories: configDir });
   },
-  /Unable to find requested modifier `not-a-modifier` among available modifiers: \[date\], \[json\]\./,
+  /Unable to find requested modifier `not-a-modifier` among available modifiers: \[json\], \[date\], \[number\], \[int\], \[float\], \[array\], \[object\], \[boolean\], \[bool\]\./,
   'expects to throw on non-existent modifier of custom-environment-variables file');
 });
