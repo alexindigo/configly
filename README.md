@@ -1,4 +1,5 @@
 # configly [![NPM Module](https://img.shields.io/npm/v/configly.svg?style=flat)](https://www.npmjs.com/package/configly)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Falexindigo%2Fconfigly.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Falexindigo%2Fconfigly?ref=badge_shield)
 
 A developer-friendly lightweight replacement for the `config` module that works with custom config directory and pluggable parsers.
 
@@ -480,3 +481,6 @@ Main differences between `configly` and `config`:
 ## License
 
 Configly is released under the MIT license.
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Falexindigo%2Fconfigly.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Falexindigo%2Fconfigly?ref=badge_large)
