@@ -1,6 +1,11 @@
 // by default use just `date`, `json` modifiers
 module.exports = {
+  // relies on built-in date parsing
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse
   date: date,
+
+  // relies on built-in json parsing
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse
   json: json
 };
 
@@ -11,20 +16,14 @@ module.exports = {
  * @returns {Date} - Date object representaion of the provided string
  */
 function date(value) {
-  var parsedDate;
+  var parsedDate = Date.parse(value);
 
-  try {
-    parsedDate = new Date(value);
-  } catch(e) {
-    return throwModifierError('date', value, e);
+  // couldn't parse it
+  if (isNaN(parsedDate)) {
+    return throwModifierError('date', value, {message: 'Invalid Date'});
   }
 
-  // or if it didn't throw
-  if (parsedDate.toString() == 'Invalid Date') {
-    return throwModifierError('date', value, {message: parsedDate.toString()});
-  }
-
-  return parsedDate;
+  return new Date(parsedDate);
 }
 
 /**
@@ -39,7 +38,7 @@ function json(value) {
   try {
     parsedPojo = JSON.parse(value);
   } catch(e) {
-    return throwModifierError('date', value, e);
+    return throwModifierError('json', value, e);
   }
 
   return parsedPojo;
@@ -50,8 +49,8 @@ function json(value) {
  *
  * @param   {string} modifier - Modifier name
  * @param   {mixed} value - Attempted to parse value
- * @param   {object} [exception] - Corresponding exception, if provided
+ * @param   {object} exception - Corresponding exception, if provided
  */
 function throwModifierError(modifier, value, exception) {
-  throw new Error('Unable to parse provided value `' + value + '` with `' + modifier + '` modifier.' + (exception ?  ' Exception: ' + exception.message : ''));
+  throw new Error('Unable to parse provided value `' + value + '` with `' + modifier + '` modifier. Exception: ' + exception.message);
 }

@@ -1,0 +1,6 @@
+{
+  "stuff": {
+    "json": "json SOMETHING_LIKE",
+    "json_as_string": "${json SOMETHING_LIKE}"
+  }
+}

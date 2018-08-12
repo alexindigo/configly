@@ -15,6 +15,6 @@ test('malformed date environment variable with date modifier', function(t)
   {
     config({ directories: configDir });
   },
-  {message: 'Unable to parse provided value `If it doesn\'t look like date` with `date` modifier. Exception: Invalid Date'},
+  /Unable to parse provided value `If it doesn\'t look like date` with `date` modifier. Exception: Invalid Date/,
   'expects to throw on malformed date within date modifier of custom-environment-variables file');
 });
