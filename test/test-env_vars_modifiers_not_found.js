@@ -1,7 +1,7 @@
 var testName  = 'env_vars_modifiers_not_found';
 var test      = require('tape');
 var path      = require('path');
-var config    = require('../');
+var config    = require('../configure');
 var configDir = path.join(__dirname, 'fixtures/config/' + testName);
 
 test('environment variable with non-existent modifier', function(t)

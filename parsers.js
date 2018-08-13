@@ -1,4 +1,6 @@
-var Module = require('module');
+var path   = require('path')
+  , Module = require('module')
+  ;
 
 // by default use just `js` and `json` parsers
 module.exports = {
@@ -21,6 +23,15 @@ function jsCompile(content, file)
   // and pretend it to be child of the caller module
   // but there is no obvious way, yet
   var jsMod = new Module(file, module);
+
+  // override parents to exclude configly from the chain
+  // it's like this js file is included directly
+  // from the file that required `configly`
+  jsMod.parent = jsMod.parent.parent.parent;
+  // generate node_modules paths for the file
+  jsMod.paths = Module._nodeModulePaths(path.dirname(file));
+
+  // execute the module
   jsMod._compile(content, file);
   // return just exported object
   return jsMod.exports;

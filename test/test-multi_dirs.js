@@ -1,5 +1,5 @@
 var test   = require('tape');
-var config = require('../');
+var config = require('../configure');
 
 test('multi dirs', function(t)
 {

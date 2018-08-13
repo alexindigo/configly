@@ -1,7 +1,7 @@
 var testName  = 'env_vars_modifiers_date_malformed';
 var test      = require('tape');
 var path      = require('path');
-var config    = require('../');
+var config    = require('../configure');
 var configDir = path.join(__dirname, 'fixtures/config/' + testName);
 
 test('malformed date environment variable with date modifier', function(t)

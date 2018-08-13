@@ -1,11 +1,11 @@
 var testName  = 'env_vars_modifiers';
 var test      = require('tape');
 var path      = require('path');
-var config    = require('../');
+var config    = require('../configure');
 var expected  = require('./fixtures/expected/' + testName + '.js');
 var configDir = path.join(__dirname, 'fixtures/config/' + testName);
 
-test('custom environment variables with custom modifiers', function(t)
+test('treated environment variables with modifiers', function(t)
 {
   t.plan(1);
 

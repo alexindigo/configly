@@ -1,6 +1,6 @@
 var testName = 'default';
 var test     = require('tape');
-var config   = require('../');
+var config   = require('../configure');
 var expected = require('./fixtures/expected/' + testName + '.json');
 
 test('default', function(t)

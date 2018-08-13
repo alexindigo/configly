@@ -2,7 +2,7 @@ var testName  = 'hooks';
 var test      = require('tape');
 var path      = require('path');
 var merge     = require('deeply');
-var configly  = require('../');
+var configly  = require('../configure');
 var expected  = require('./fixtures/expected/' + testName + '.json');
 var configDir = path.join(__dirname, 'fixtures/config/' + testName);
 

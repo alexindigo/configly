@@ -1,7 +1,7 @@
 var testName  = 'new';
 var test      = require('tape');
 var path      = require('path');
-var config    = require('../');
+var config    = require('../configure');
 var parsers   = require('../parsers');
 var configDir = path.join(__dirname, 'fixtures/config/' + testName);
 

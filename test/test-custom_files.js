@@ -1,6 +1,6 @@
 var path   = require('path');
 var test   = require('tape');
-var config = require('../');
+var config = require('../configure');
 
 test('custom files', function(t)
 {

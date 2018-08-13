@@ -1,7 +1,7 @@
 var testName  = 'broken_env_vars';
 var test      = require('tape');
 var path      = require('path');
-var config    = require('../');
+var config    = require('../configure');
 var configDir = path.join(__dirname, 'fixtures/config/' + testName);
 
 test('broken custom environment variables', function(t)

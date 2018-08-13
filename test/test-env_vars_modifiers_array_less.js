@@ -1,7 +1,7 @@
 var testName  = 'env_vars_modifiers_array_less';
 var test      = require('tape');
 var path      = require('path');
-var config    = require('../');
+var config    = require('../configure');
 var configDir = path.join(__dirname, 'fixtures/config/' + testName);
 
 test('environment variable without array with array modifier', function(t)

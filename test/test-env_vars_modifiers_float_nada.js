@@ -1,7 +1,7 @@
 var testName  = 'env_vars_modifiers_float_nada';
 var test      = require('tape');
 var path      = require('path');
-var config    = require('../');
+var config    = require('../configure');
 var configDir = path.join(__dirname, 'fixtures/config/' + testName);
 
 test('not a float environment variable with float modifier', function(t)

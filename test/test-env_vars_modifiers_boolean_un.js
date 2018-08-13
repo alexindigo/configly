@@ -1,7 +1,7 @@
 var testName  = 'env_vars_modifiers_boolean_un';
 var test      = require('tape');
 var path      = require('path');
-var config    = require('../');
+var config    = require('../configure');
 var configDir = path.join(__dirname, 'fixtures/config/' + testName);
 
 test('not a boolean environment variable with boolean modifier', function(t)

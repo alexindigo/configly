@@ -1,7 +1,7 @@
 var testName  = 'env_vars_modifiers_object_sans';
 var test      = require('tape');
 var path      = require('path');
-var config    = require('../');
+var config    = require('../configure');
 var configDir = path.join(__dirname, 'fixtures/config/' + testName);
 
 test('environment variable without object with object modifier', function(t)

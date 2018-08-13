@@ -3,7 +3,7 @@ var sinon     = require('sinon');
 var test      = require('tape');
 var path      = require('path');
 var fs        = require('fs');
-var config    = require('../');
+var config    = require('../configure');
 var expected  = require('./fixtures/expected/' + testName + '.json');
 var configDir = path.join(__dirname, 'fixtures/config/' + testName);
 

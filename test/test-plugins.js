@@ -2,7 +2,7 @@ var testName  = 'plugins';
 var test      = require('tape');
 var path      = require('path');
 var merge     = require('deeply');
-var config    = require('../');
+var config    = require('../configure');
 var compare   = require('../compare');
 var configDir = path.join(__dirname, 'fixtures/config/' + testName);
 

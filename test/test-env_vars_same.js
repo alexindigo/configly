@@ -1,7 +1,7 @@
 var testName  = 'env_vars_same';
 var test      = require('tape');
 var path      = require('path');
-var config    = require('../');
+var config    = require('../configure');
 var expected  = require('./fixtures/expected/' + testName + '.json');
 var configDir = path.join(__dirname, 'fixtures/config/' + testName);
 
