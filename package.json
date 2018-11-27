@@ -1,6 +1,6 @@
 {
   "name": "configly",
-  "version": "5.0.0-canary.0",
+  "version": "5.0.0-canary.1",
   "description": "A developer-friendly lightweight replacement for the 'config' module that works with custom config directories and pluggable parsers",
   "main": "default.js",
   "scripts": {
