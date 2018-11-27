@@ -29,7 +29,10 @@ module.exports = {
   // makes sure on boolean go through
   boolean: boolean,
   // use `bool` as an alias to boolean
-  bool: boolean
+  bool: boolean,
+
+  // provides regexp support
+  regexp: regexp
 };
 
 /**
@@ -155,6 +158,33 @@ function boolean(value) {
   }
 
   return parsedBoolean;
+}
+
+/**
+ * Parses provided string as a RegExp object
+ * if provided string starts and ends with `/`
+ * (with optional modifiers after the last `/`)
+ * then it's considered as regular expression string
+ * so characters between slashes are used as input
+ * for the new RegExp object, with optional modifiers
+ * as second argument, otherwise the whole string
+ * is used as RegExp input.
+ *
+ * @param   {string} value - string to parse
+ * @returns {RegExp} - Parsed regular expression
+ */
+function regexp(value) {
+  var re
+    , pattern = value.match(/^\/(.+)\/([a-z]*)$/)
+    ;
+
+  if (pattern) {
+    re = new RegExp(pattern[1], pattern[2] || '');
+  } else {
+    re = new RegExp(value);
+  }
+
+  return re;
 }
 
 /**

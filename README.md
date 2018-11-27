@@ -34,10 +34,12 @@ This package is addressing those issues, while keeping easy of use and feature s
 
 ### Basic
 
+Configly provides rich configuration options, as well as set of sane (and battle-tested) defaults, which allow you to get a lot from basic setups.
+
 To simply replace your current `config` setup, add following to your files:
 
 ```javascript
-var config = require('configly')();
+var config = require('configly');
 
 console.log(config.my.combined.options);
 ```
@@ -52,7 +54,7 @@ It will cache the result, so files will be read only once per process.
 Out of the box `configly` supports only two formats (`.js` and `.json`), but developers can add their own parsers and support for more formats (e.g. `.ini`, `.yaml`, `.cson`).
 
 ```javascript
-var config     = require('configly');
+var config     = require('configly/configure');
 // more parsers
 var ini        = require('ini');
 // Note: recommended to use `cson-parser` over `cson`
@@ -116,7 +118,7 @@ that uses `configly`.
 To load config files from a custom directory, just specify it as the first argument.
 
 ```javascript
-var config = require('configly')('./etc'); // `require('configly')('etc');` would work the same way
+var config = require('configly/configure')('./etc'); // `require('configly')('etc');` would work the same way
 ```
 
 It will load files from the `etc` folder relative to the current working directory,
@@ -126,7 +128,7 @@ and for command line apps that could be invoked from different directories.
 
 ```javascript
 var path   = require('path');
-var config = require('configly')(path.join(__dirname, 'etc'));
+var config = require('configly/configure')(path.join(__dirname, 'etc'));
 ```
 
 Or you can set up new directory as default one
@@ -136,7 +138,7 @@ from within other files.
 ```javascript
 // config.js
 var path     = require('path');
-var configly = require('configly');
+var configly = require('configly/configure');
 
 module.exports = configly.new({
   defaults: {
@@ -154,7 +156,7 @@ It is possible to load files from more than one config directory within one appl
 
 ```javascript
 var path     = require('path');
-var configly = require('configly');
+var configly = require('configly/configure');
 
 // "inline"
 var oneConfig = configly([
@@ -218,7 +220,7 @@ and custom files would provide needed functionality.
 
 ```javascript
 var path     = require('path')
-  , configly = require('configly')
+  , configly = require('configly/configure')
   , package  = require('./package.json')
   ;
 
@@ -273,12 +275,12 @@ for example to pass `false` to your config or if some library requires casted pa
     "mocksEnabled"  :"json FETCH_MOCKS_ENABLED", // 'false' -> false
     "timeout" :"json FETCH_TIMEOUT", // '1500' -> 1500
     "cutOffDate" : "date DATE_CUTOFF", // '2018-08-08' -> new Date('2018-08-08')
-    "nullSignalSkip": "json PASSED_NULL" // 'null' -> null -> ''
+    "nullSignal": "json PASSED_NULL" // 'null' -> null
   },
   "combinedBoolCastedToString" : "${json FETCH_MOCKS_ENABLED}", // 'false' -> false -> 'false'
   "combinedNumberCastedToString" : "${json FETCH_TIMEOUT}", // '1500' -> 1500 -> '1500'
   "combinedDateCastedToString" : "${date DATE_CUTOFF}", // '2018-08-08' -> new Date('2018-08-08') -> 'Tue Aug 07 2018 17:00:00 GMT-0700 (Pacific Daylight Time)'
-  "combinedNullSignalSkip": "${json PASSED_NULL}", // 'null' -> null -> '' -> ''
+  "combinedNullSignalSkip": "${json PASSED_NULL}", // 'null' -> null -> 'null'
   "nullNoModifierIsString": "PASSED_NULL", // 'null' -> 'null'
   "combinedNullNoModifierIsString": "${PASSED_NULL}" // 'null' -> 'null' -> 'null'
 }
@@ -372,7 +374,7 @@ based on the custom config file within your app.
 
 ```javascript
 var path     = require('path')
-  , configly = require('configly')
+  , configly = require('configly/configure')
   , ini      = require('ini')
   , yaml     = require('js-yaml')
   ;
@@ -446,7 +448,7 @@ while keeping standard approach within your organization.
 
 ```javascript
 var path      = require('path')
-  , configly  = require('configly')
+  , configly  = require('configly/configure')
     // get application's name for per application custom config file,
     // useful for having per environment specific config files
     // separate from code base of the application

@@ -1,0 +1,12 @@
+{
+  "stuff": {
+    "datetime": "datetimeUTC SOMEWHERE_TIME",
+    "datetime_as_string": "${datetimeUTC SOMEWHERE_TIME}",
+
+    "date": "date SOMEWHERE_TIME",
+    "date_as_string": "${date SOMEWHERE_TIME}",
+
+    "combined_datetime": "date datetimeUTC SOMEWHERE_TIME",
+    "combined_datetime_as_string": "${date datetimeUTC SOMEWHERE_TIME}"
+  }
+}

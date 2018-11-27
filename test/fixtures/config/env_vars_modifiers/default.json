@@ -26,6 +26,46 @@
     "date_as_string": "--OOPS--",
 
     "without_env": "--EXPECT IT--",
-    "without_env_as_string": "--EXPECT IT AS STRING--"
+    "without_env_as_string": "--EXPECT IT AS STRING--",
+
+    "number_with_int": "--OOPS--",
+    "number_with_int_as_string": "--OOPS--",
+
+    "int": "--OOPS--",
+    "int_as_string": "--OOPS--",
+
+    "number_with_float": "--OOPS--",
+    "number_with_float_as_string": "--OOPS--",
+
+    "regexp": "--OOPS--",
+    "regexp_as_string": "--OOPS--",
+    "other_regexp": "--OOPS--",
+    "other_regexp_as_string": "--OOPS--",
+    "another_regexp": "--OOPS--",
+    "another_regexp_as_string": "--OOPS--",
+
+    "array": "--OOPS--",
+    "array_as_string": "--OOPS--",
+
+    "object": "--OOPS--",
+    "object_as_string": "--OOPS--",
+
+    "boolean_true": "--OOPS--",
+    "boolean_true_as_string": "--OOPS--",
+    "boolean_false": "--OOPS--",
+    "boolean_false_as_string": "--OOPS--",
+    "boolean_zero": "--OOPS--",
+    "boolean_zero_as_string": "--OOPS--",
+    "boolean_one": "--OOPS--",
+    "boolean_one_as_string": "--OOPS--",
+
+    "bool_true": "--OOPS--",
+    "bool_true_as_string": "--OOPS--",
+    "bool_false": "--OOPS--",
+    "bool_false_as_string": "--OOPS--",
+    "bool_zero": "--OOPS--",
+    "bool_zero_as_string": "--OOPS--",
+    "bool_one": "--OOPS--",
+    "bool_one_as_string": "--OOPS--"
   }
 }

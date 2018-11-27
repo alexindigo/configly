@@ -8,8 +8,8 @@ module.exports = {
     'number'            : 345,
     'number_as_string'  : '345',
 
-    'null'              : '--KEEP IT DEFAULT--',
-    'null_as_string'    : '--KEEP IT DEFAULT AS STRING--',
+    'null'              : null,
+    'null_as_string'    : 'null',
     'null_no_modifiers' : 'null',
 
     'true'              : true,
@@ -39,8 +39,15 @@ module.exports = {
     'number_with_float': 1.5,
     'number_with_float_as_string': '1.5',
 
+    'regexp': /something to match/,
+    'regexp_as_string': '/something to match/',
+    'other_regexp': /^[a-z0-9]+/i,
+    'other_regexp_as_string': '/^[a-z0-9]+/i',
+    'another_regexp': /^[A-Z0-9]+/,
+    'another_regexp_as_string': '/^[A-Z0-9]+/',
+
     'array': [25, 'boom', null, false],
-    'array_as_string': '25,boom,,false', // <-- `null` didn't make the cut
+    'array_as_string': '25,boom,,false', // <-- `null` didn't make the cut, ways of .toString()
 
     'object': {a: 1, b: 'two', c: true},
     'object_as_string': '[object Object]', // <-- Object Objectovich

@@ -25,6 +25,15 @@
     "date": "date SOMETIME_THEN",
     "date_as_string": "${date SOMETIME_THEN}",
 
+    "regexp": "regexp SOME_PATTERN",
+    "regexp_as_string": "${regexp SOME_PATTERN}",
+
+    "other_regexp": "regexp OTHER_PATTERN",
+    "other_regexp_as_string": "${regexp OTHER_PATTERN}",
+
+    "another_regexp": "regexp ANOTHER_PATTERN",
+    "another_regexp_as_string": "${regexp ANOTHER_PATTERN}",
+
     "without_env": "json WITHOUT_ENV",
     "without_env_as_string": "${json WITHOUT_ENV}",
 

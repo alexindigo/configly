@@ -43,6 +43,10 @@ test('treated environment variables with modifiers', function(t)
   process.env['EITHER_OR_ZERO'] = '0';
   process.env['EITHER_OR_ONE'] = '1';
 
+  process.env['SOME_PATTERN'] = 'something to match';
+  process.env['OTHER_PATTERN'] = '/^[a-z0-9]+/i';
+  process.env['ANOTHER_PATTERN'] = '/^[A-Z0-9]+/';
+
   // make sure it's not set
   delete process.env['WITHOUT_ENV'];
 
