@@ -2,9 +2,9 @@
 
 A developer-friendly lightweight replacement for the `config` module that works with custom config directories, pluggable parsers and with many other handy features.
 
-[![Linux Build](https://img.shields.io/travis/alexindigo/configly/canary.svg?label=linux:6.x-10.x&style=flat)](https://travis-ci.org/alexindigo/configly)
-[![MacOS Build](https://img.shields.io/travis/alexindigo/configly/canary.svg?label=macos:6.x-10.x&style=flat)](https://travis-ci.org/alexindigo/configly)
-[![Windows Build](https://img.shields.io/appveyor/ci/alexindigo/configly/canary.svg?label=windows:6.x-10.x&style=flat)](https://ci.appveyor.com/project/alexindigo/configly)
+[![Linux Build](https://img.shields.io/travis/alexindigo/configly/canary.svg?label=linux:6.x-11.x&style=flat)](https://travis-ci.org/alexindigo/configly)
+[![MacOS Build](https://img.shields.io/travis/alexindigo/configly/canary.svg?label=macos:6.x-11.x&style=flat)](https://travis-ci.org/alexindigo/configly)
+[![Windows Build](https://img.shields.io/appveyor/ci/alexindigo/configly/canary.svg?label=windows:6.x-11.x&style=flat)](https://ci.appveyor.com/project/alexindigo/configly)
 
 [![Coverage Status](https://img.shields.io/coveralls/alexindigo/configly/canary.svg?label=code+coverage&style=flat)](https://coveralls.io/github/alexindigo/configly?branch=canary)
 [![Dependency Status](https://img.shields.io/david/alexindigo/configly.svg?style=flat)](https://david-dm.org/alexindigo/configly)
@@ -59,7 +59,10 @@ var config     = require('configly/configure');
 var ini        = require('ini');
 // Note: recommended to use `cson-parser` over `cson`
 // due to https://github.com/groupon/cson-parser/issues/56
-var cson       = require('cson-parser');
+// Update:
+// recommended to use `cson` over `cson-parser`
+// due to https://github.com/groupon/cson-parser/issues/74
+var cson       = require('cson');
 var yaml       = require('js-yaml');
 var properties = require('properties');
 var json5      = require('json5');

@@ -10,7 +10,7 @@ var configDir = path.join(__dirname, 'fixtures/config/' + testName);
 
 // short list
 var ini        = require('ini');
-var cson       = require('cson-parser');
+var cson       = require('cson');
 var yaml       = require('js-yaml');
 var properties = require('properties');
 var json5      = require('json5');
