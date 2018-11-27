@@ -18,9 +18,9 @@ script:
   - node --version
   - npm --version
   # linting
-  - npm run ci-lint
+  - yarn ci-lint
   # nodejs testing
-  - npm run test
+  - yarn test
 
 after_success:
   - "cat coverage/lcov.info | ./node_modules/.bin/coveralls"
