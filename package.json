@@ -55,7 +55,7 @@
   },
   "dependencies": {
     "compare-property": "^2.0.0",
-    "deeply": "^2.0.3",
+    "deeply": "3.0.0",
     "fulcon": "^2.0.0",
     "precise-typeof": "^2.0.0",
     "stripbom": "^3.0.0"

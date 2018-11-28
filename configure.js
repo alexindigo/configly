@@ -1,4 +1,5 @@
-var merge        = require('deeply')
+var deeply       = require('deeply')
+  , typeOf       = require('precise-typeof')
   // sub-modules
   , compare      = require('./compare.js')
   , parsers      = require('./parsers.js')
@@ -19,7 +20,8 @@ configly.new               = createNew;
 configly.load              = load;
 // internal helpers
 configly.compareExtensions = compare.ascendingIgnoreCase;
-configly.arrayMerge        = merge.adapters.array;
+configly.arrayMerge        = deeply.adapters.array;
+configly.mergeTypeOf       = function(input) { return typeOf(input, {pojoOnly: true}); };
 
 // defaults
 configly.defaults = {

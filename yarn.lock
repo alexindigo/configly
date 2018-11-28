@@ -520,13 +520,13 @@ deep-is@~0.1.3:
   resolved "https://registry.yarnpkg.com/deep-is/-/deep-is-0.1.3.tgz#b369d6fb5dbc13eecf524f91b070feedc357cf34"
   integrity sha1-s2nW+128E+7PUk+RsHD+7cNXzzQ=
 
-deeply@^2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/deeply/-/deeply-2.0.3.tgz#613b1fe7380c00e36df896872f0efaecb1642342"
-  integrity sha1-YTsf5zgMAONt+JaHLw767LFkI0I=
+deeply@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/deeply/-/deeply-3.0.0.tgz#1cd48f9b45429eb1ca44b840118940b431e6bd51"
+  integrity sha512-26Im0tS4/FUIPVFjtMbBvC+X4p+R8F1E35GF7p6I9dM8hVdxmAqgFGYzRaSiLWmp+NuqAnV+90NVGUBxDZU2Pw==
   dependencies:
-    fulcon "^1.0.1"
-    precise-typeof "^1.0.2"
+    fulcon "^2.0.0"
+    precise-typeof "^2.0.0"
 
 default-require-extensions@^2.0.0:
   version "2.0.0"
@@ -893,11 +893,6 @@ fs.realpath@^1.0.0:
   resolved "https://registry.yarnpkg.com/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
   integrity sha1-FQStJSMVjKpA20onh8sBQRmU6k8=
 
-fulcon@^1.0.1:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/fulcon/-/fulcon-1.0.2.tgz#8a4dfda4c73fcd9cc62a79d5045c392b45547320"
-  integrity sha1-ik39pMc/zZzGKnnVBFw5K0VUcyA=
-
 fulcon@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/fulcon/-/fulcon-2.0.0.tgz#087966662365f96318518ba129b952ffe4a6160d"
@@ -1087,11 +1082,6 @@ is-arrayish@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/is-arrayish/-/is-arrayish-0.2.1.tgz#77c99840527aa8ecb1a8ba697b80645a7a926a9d"
   integrity sha1-d8mYQFJ6qOyxqLppe4BkWnqSap0=
-
-is-buffer@^1.1.1:
-  version "1.1.6"
-  resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-1.1.6.tgz#efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
-  integrity sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w==
 
 is-builtin-module@^1.0.0:
   version "1.0.0"
@@ -1780,13 +1770,6 @@ pre-commit@^1.1.3:
     cross-spawn "^5.0.1"
     spawn-sync "^1.0.15"
     which "1.2.x"
-
-precise-typeof@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/precise-typeof/-/precise-typeof-1.0.2.tgz#db8ed470fd08470f5ef7c9b08ee70d6dd5232f0b"
-  integrity sha1-247UcP0IRw9e98mwjucNbdUjLws=
-  dependencies:
-    is-buffer "^1.1.1"
 
 precise-typeof@^2.0.0:
   version "2.0.0"
