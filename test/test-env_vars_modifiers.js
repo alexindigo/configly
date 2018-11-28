@@ -51,5 +51,6 @@ test('treated environment variables with modifiers', function(t)
   delete process.env['WITHOUT_ENV'];
 
   configObj = config({ directories: configDir });
+
   t.deepEqual(configObj, expected, 'expects to get right config object');
 });

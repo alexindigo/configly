@@ -1,7 +1,7 @@
 var moment = require('moment');
 
 var datetime = moment.utc('2016-01-01T00:00:00');
-var date = new Date('Fri Jan 01 2016 00:00:00 GMT-0800');
+var date = new Date('Fri Jan 01 2016 00:00:00');
 var combinedDate = new Date('Thu Dec 31 2015 16:00:00 GMT-0800');
 
 module.exports = {
