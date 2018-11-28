@@ -2,11 +2,11 @@
 
 A developer-friendly lightweight replacement for the `config` module that works with custom config directories, pluggable parsers and with many other handy features.
 
-[![Linux Build](https://img.shields.io/travis/alexindigo/configly/canary.svg?label=linux:6.x-11.x&style=flat)](https://travis-ci.org/alexindigo/configly)
-[![MacOS Build](https://img.shields.io/travis/alexindigo/configly/canary.svg?label=macos:6.x-11.x&style=flat)](https://travis-ci.org/alexindigo/configly)
-[![Windows Build](https://img.shields.io/appveyor/ci/alexindigo/configly/canary.svg?label=windows:6.x-11.x&style=flat)](https://ci.appveyor.com/project/alexindigo/configly)
+[![Linux Build](https://img.shields.io/travis/alexindigo/configly/master.svg?label=linux:6.x-11.x&style=flat)](https://travis-ci.org/alexindigo/configly)
+[![MacOS Build](https://img.shields.io/travis/alexindigo/configly/master.svg?label=macos:6.x-11.x&style=flat)](https://travis-ci.org/alexindigo/configly)
+[![Windows Build](https://img.shields.io/appveyor/ci/alexindigo/configly/master.svg?label=windows:6.x-11.x&style=flat)](https://ci.appveyor.com/project/alexindigo/configly)
 
-[![Coverage Status](https://img.shields.io/coveralls/alexindigo/configly/canary.svg?label=code+coverage&style=flat)](https://coveralls.io/github/alexindigo/configly?branch=canary)
+[![Coverage Status](https://img.shields.io/coveralls/alexindigo/configly/master.svg?label=code+coverage&style=flat)](https://coveralls.io/github/alexindigo/configly?branch=master)
 [![Dependency Status](https://img.shields.io/david/alexindigo/configly.svg?style=flat)](https://david-dm.org/alexindigo/configly)
 
 *Notice of change of ownership: Starting version 3.0.0 this package has changed it's owner and goals. The old version (2.0.3) is still available on npm via `npm install configly@2.0.3` and on [github.com/ksmithut/configly](https://github.com/ksmithut/configly). Thank you.*
@@ -76,7 +76,7 @@ var configObj = config({
     ini       : ini.parse,
     // have it as a wrapper to prevent extra arguments leaking
     cson      : function(str) { return cson.parse(str); },
-    yml       : function(str) { return yaml.safeLoad(str); },
+    yaml      : function(str) { return yaml.safeLoad(str); },
     // same options as used within `config` module
     properties: function(str) { return properties.parse(str, {namespaces: true, variables: true, sections: true}); },
     // use json5 instead of `JSON.parse`
@@ -96,7 +96,7 @@ var configNew = config.new({
     ini       : ini.parse,
     // have it as a wrapper to prevent extra arguments leaking
     cson      : function(str) { return cson.parse(str); },
-    yml       : function(str) { return yaml.safeLoad(str); },
+    yaml      : function(str) { return yaml.safeLoad(str); },
     // same options as used within `config` module
     properties: function(str) { return properties.parse(str, {namespaces: true, variables: true, sections: true}); },
     // use json5 instead of `JSON.parse`
@@ -395,16 +395,16 @@ module.exports = configly({
     ]
   },
   // also will try to load config files matching current app name
-  // e.g. `my-app.ini`, 'my-app.js', `my-app.json`, `my-app.yml`,
-  // `my-app-production.ini`, `my-app-production.js`, `my-app-production.json`, `my-app-production.yml`,
+  // e.g. `my-app.ini`, 'my-app.js', `my-app.json`, `my-app.yaml`,
+  // `my-app-production.ini`, `my-app-production.js`, `my-app-production.json`, `my-app-production.yaml`,
   // from both local config folder and `/etc/consul`
   files: configly.files.concat('my-app'),
 
   // throw in custom parsers as well
   parsers: {
-    ini : ini.parse,
+    ini  : ini.parse,
     // have it as a wrapper to prevent extra arguments leaking
-    yml : function(str) { return yaml.safeLoad(str); }
+    yaml : function(str) { return yaml.safeLoad(str); }
   }
 });
 ```
@@ -504,7 +504,8 @@ Main differences between `configly` and `config`:
 - Configly provides deterministic (and controllable) order of the file extensions it loads from.
 - Configly provides post-load hooks for config files, (e.g. `custom-environment-variables` and `custom-include-files` work via this mechanism).
 - Configly provides ability to combine environment variables within one entry (e.g. `"endpoint": "${REMOTE_HOST}:${REMOTE_PORT}"`).
-- Configly provides ability to "mount" custom config files into specified entries (useful to pull webpack manifest files into app's config).
+- Configly supports built-in and custom modifiers for environment variables overrides (e.g. `"loggingEnabled": "boolean LOGGING_ENABLED_BOOLEAN_AS_STRING"`)
+- Configly provides ability to "mount" custom config files into specified entries (e.g. useful to pull webpack manifest files into app's config).
 - Configly provides access to the underlying functions and defaults, allowing to utilize parts of the functionality for greater flexibility.
 
 ### Does Not
@@ -513,7 +514,7 @@ Main differences between `configly` and `config`:
 - Configly doesn't pollute your logs with warnings of non-existent files,
   it will either throw (if couldn't read/parse a file) or be silent.
 - Configly doesn't provide `get`, `has` methods, it always returns pure js (POJO) object.
-- Configly doesn't auto-strip comments from JSON files, use `configly.PARSERS['json'] = json5.parse;`.
+- Configly doesn't auto-strip comments from JSON files, instead use `parsers: {json: (str) => json5.parse(str)}`.
 
 ## License
 

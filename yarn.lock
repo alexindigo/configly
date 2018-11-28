@@ -1119,11 +1119,6 @@ is-fullwidth-code-point@^2.0.0:
   resolved "https://registry.yarnpkg.com/is-fullwidth-code-point/-/is-fullwidth-code-point-2.0.0.tgz#a3b30a5c4f199183167aaab93beefae3ddfb654f"
   integrity sha1-o7MKXE8ZkYMWeqq5O+764937ZU8=
 
-is-node-modern@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/is-node-modern/-/is-node-modern-1.0.0.tgz#cfe2607be7403b05b28a566f66cbf8a583d4fc63"
-  integrity sha1-z+Jge+dAOwWyilZvZsv4pYPU/GM=
-
 is-promise@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/is-promise/-/is-promise-2.1.0.tgz#79a2a9ece7f096e80f36d2b2f3bc16c1ff4bf3fa"

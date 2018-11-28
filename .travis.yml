@@ -18,7 +18,7 @@ script:
   - node --version
   - npm --version
   # linting
-  - yarn ci-lint
+  - yarn lint
   # nodejs testing
   - yarn test
 
