@@ -31,6 +31,7 @@ function jsCompile(content, file)
     && typeof jsMod.parent.id === 'string'
     && jsMod.parent.id.match(/\/node_modules\/configly\//)
     && jsMod.parent.parent) {
+    /* istanbul ignore next */
     jsMod.parent = jsMod.parent.parent;
   }
 
