@@ -11,16 +11,16 @@ os:
   - linux
 
 install:
-  - travis_retry yarn install
+  - travis_retry npm install
 
 script:
   - uname -a
   - node --version
   - npm --version
   # linting
-  - yarn lint
+  - npm run lint
   # nodejs testing
-  - yarn test
+  - npm run test
 
 after_success:
   - "cat coverage/lcov.info | ./node_modules/.bin/coveralls"
