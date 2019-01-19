@@ -26,8 +26,14 @@ function jsCompile(content, file)
 
   // override parents to exclude configly from the chain
   // it's like this js file is included directly
-  // from the file that required `configly`
-  jsMod.parent = jsMod.parent.parent.parent;
+  // from the file that included `configly`
+  while (jsMod.parent
+    && typeof jsMod.parent.id === 'string'
+    && jsMod.parent.id.match(/\/node_modules\/configly\//)
+    && jsMod.parent.parent) {
+    jsMod.parent = jsMod.parent.parent;
+  }
+
   // generate node_modules paths for the file
   jsMod.paths = Module._nodeModulePaths(path.dirname(file));
 
