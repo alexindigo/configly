@@ -121,7 +121,7 @@ that uses `configly`.
 To load config files from a custom directory, just specify it as the first argument.
 
 ```javascript
-var config = require('configly/configure')('./etc'); // `require('configly')('etc');` would work the same way
+var config = require('configly/configure')({directories: './etc'}); // `require('configly')('etc');` would work the same way
 ```
 
 It will load files from the `etc` folder relative to the current working directory,
@@ -131,7 +131,7 @@ and for command line apps that could be invoked from different directories.
 
 ```javascript
 var path   = require('path');
-var config = require('configly/configure')(path.join(__dirname, 'etc'));
+var config = require('configly/configure')({directories: path.join(__dirname, 'etc')});
 ```
 
 Or you can set up new directory as default one
@@ -162,10 +162,10 @@ var path     = require('path');
 var configly = require('configly/configure');
 
 // "inline"
-var oneConfig = configly([
+var oneConfig = configly({directories: [
   path.join(__dirname, 'app-config'),
   path.join(__dirname, 'rules-config')
-]);
+]});
 ```
 
 Or creating new default
@@ -195,7 +195,8 @@ var config = configly({
 Following code will completely replace list of filenames.
 
 ```javascript
-var config = configly('/etc', {
+var config = configly({
+  directories: '/etc',
   files: [
     'totally',
     'custom',
@@ -211,7 +212,8 @@ but augment it with server/environment specific config
 you can add absolute path filename to the files list.
 
 ```javascript
-var config = configly(path.join(__dirname, 'config'), {
+var config = configly({
+  directories: path.join(__dirname, 'config'),
   // `configly` will search for `/etc/consul/env.js`, `/etc/consul/env.json`, etc
   // after loading default files from local `config` folder
   files: configly.files.concat('/etc/consul/env')
