@@ -5,7 +5,7 @@
   "main": "default.js",
   "scripts": {
     "lint": "is-node-modern 8 && eslint *.js test/*.js || is-node-not-modern 8",
-    "pretest": "is-node-modern 8 && ncc run test/ncc_webpack_bundler_test.js || is-node-not-modern 8",
+    "pretest": "is-node-modern 10 && ncc run test/ncc_webpack_bundler_test.js || is-node-not-modern 10",
     "test": "nyc --reporter=lcov --reporter=text --check-coverage --lines 99 --functions 99 --branches 99 tape test/*.js | tap-spec",
     "debug": "tape test/*.js | tap-spec"
   },
