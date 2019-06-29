@@ -2,9 +2,9 @@
 
 A developer-friendly lightweight replacement for the `config` module that works with custom config directories, pluggable parsers and with many other handy features.
 
-[![Linux Build](https://img.shields.io/travis/alexindigo/configly/master.svg?label=linux:6.x-11.x&style=flat)](https://travis-ci.org/alexindigo/configly)
-[![MacOS Build](https://img.shields.io/travis/alexindigo/configly/master.svg?label=macos:6.x-11.x&style=flat)](https://travis-ci.org/alexindigo/configly)
-[![Windows Build](https://img.shields.io/appveyor/ci/alexindigo/configly/master.svg?label=windows:6.x-11.x&style=flat)](https://ci.appveyor.com/project/alexindigo/configly)
+[![Linux Build](https://img.shields.io/travis/alexindigo/configly/master.svg?label=linux:6.x-12.x&style=flat)](https://travis-ci.org/alexindigo/configly)
+[![MacOS Build](https://img.shields.io/travis/alexindigo/configly/master.svg?label=macos:6.x-12.x&style=flat)](https://travis-ci.org/alexindigo/configly)
+[![Windows Build](https://img.shields.io/travis/alexindigo/configly/master.svg?label=windows:6.x-12.x&style=flat)](https://travis-ci.org/alexindigo/configly)
 
 [![Coverage Status](https://img.shields.io/coveralls/alexindigo/configly/master.svg?label=code+coverage&style=flat)](https://coveralls.io/github/alexindigo/configly?branch=master)
 [![Dependency Status](https://img.shields.io/david/alexindigo/configly.svg?style=flat)](https://david-dm.org/alexindigo/configly)
@@ -179,6 +179,50 @@ module.exports = configly.new({
     ]
   }
 });
+```
+
+### Config Files Resolution Order
+
+Configly scans config directory for number of config files, then loads and merges them in specific order.
+It always starts with `default` file, as it's the place for all project's defaults, it will try load `default` with extensions for provided parsers (out of the box it will be `.js` and `.json`).
+Then it will search for environment specific files, specified via `NODE_ENV` (in case it's omitted falls back to `development`). After that it searches for files related to the runtime's hostname. It closes off "static" config files with `local` file, which usually being git-ignored and meant for local overrides of the checked in configuration options.
+After that configly proceeds to search for dynamic/meta config files – `custom-include-files` and `custom-environment-variables`...
+
+Last file to read would be `runtime` file, and meant for deployment target local configuration rather than being checked into the code repository.
+
+Example ordered list of files that will be read, in `NODE_ENV=production` environment on `dev382.corp.example.com` host:
+
+```
+default.js
+default.json
+default-production.js
+default-production.json
+production.js
+production.json
+dev382.js
+dev382.json
+dev382-production.js
+dev382-production.json
+dev382.corp.example.com.js
+dev382.corp.example.com.json
+dev382.corp.example.com-production.js
+dev382.corp.example.com-production.json
+local.js
+local.json
+local-production.js
+local-production.json
+custom-include-files.js
+custom-include-files.json
+custom-include-files-production.js
+custom-include-files-production.json
+custom-environment-variables.js
+custom-environment-variables.json
+custom-environment-variables-production.js
+custom-environment-variables-production.json
+runtime.js
+runtime.json
+runtime-production.js
+runtime-production.json
 ```
 
 ### Custom Files
