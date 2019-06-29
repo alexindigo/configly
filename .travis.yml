@@ -4,11 +4,12 @@ node_js:
   - "6"
   - "8"
   - "10"
-  - "11"
+  - "12"
 
 os:
   - osx
   - linux
+  - windows
 
 install:
   - travis_retry npm install
@@ -18,7 +19,7 @@ script:
   - node --version
   - npm --version
   # linting
-  - npm run lint
+  - if [ "$TRAVIS_OS_NAME" != "windows" ]; then npm run lint; fi
   # nodejs testing
   - npm run test
 
